@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" viewBox="0 0 280 280">
+  <rect width="280" height="280" fill="#f7f2ea"/>
+  <rect x="24" y="24" width="232" height="232" fill="#fff" stroke="#7a1f2b" stroke-width="2"/>
+  <text x="140" y="120" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" fill="#7a1f2b">Replace with</text>
+  <text x="140" y="148" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" fill="#7a1f2b">your UPI QR</text>
+  <text x="140" y="190" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#666">public/upi-qr.svg</text>
+</svg>

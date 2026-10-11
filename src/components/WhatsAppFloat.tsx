@@ -1,0 +1,24 @@
+import { shopConfig } from '../config'
+
+export function WhatsAppFloat() {
+  const href = `https://wa.me/${shopConfig.whatsappNumber}?text=${encodeURIComponent(
+    `Hi ${shopConfig.brandName}! I'd like to ask about your Diwali decor.`,
+  )}`
+
+  return (
+    <a
+      className="wa-float"
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat on WhatsApp"
+    >
+      <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true">
+        <path
+          fill="currentColor"
+          d="M16.04 3C9.4 3 4 8.3 4 14.82c0 2.1.56 4.15 1.63 5.96L4 29l8.4-2.2a12.1 12.1 0 0 0 3.64.55h.01c6.63 0 12.03-5.3 12.03-11.82C28.08 8.3 22.67 3 16.04 3zm6.95 16.9c-.3.84-1.74 1.54-2.42 1.64-.62.09-1.4.13-2.26-.14-.52-.16-1.18-.38-2.03-.74-3.57-1.54-5.89-5.14-6.07-5.38-.17-.24-1.42-1.89-1.42-3.6 0-1.72.9-2.57 1.22-2.92.32-.35.7-.44.93-.44h.67c.21 0 .5-.08.78.6.3.7 1.02 2.48 1.11 2.66.09.18.15.39.03.63-.12.24-.18.39-.35.6-.17.21-.36.47-.51.63-.17.18-.35.37-.15.72.2.35.9 1.48 1.93 2.4 1.33 1.18 2.45 1.55 2.8 1.72.35.18.55.15.75-.09.2-.24.86-1 .1-1.09.25-.09 1.5-.63 1.71-.7.21-.07.35-.04.48.11.13.15.51 1.18.55 1.41.04.24.02.48-.12.87z"
+        />
+      </svg>
+    </a>
+  )
+}
