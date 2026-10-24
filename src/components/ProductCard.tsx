@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import type { Product } from '../data/products'
 import { useCart } from '../context/CartContext'
 import { formatINR } from '../utils/whatsapp'
@@ -11,6 +11,7 @@ type Props = {
 
 export function ProductCard({ product, onAdded, index = 0 }: Props) {
   const { add } = useCart()
+  const navigate = useNavigate()
 
   return (
     <article
@@ -32,16 +33,28 @@ export function ProductCard({ product, onAdded, index = 0 }: Props) {
           <p className="product-desc">{product.description}</p>
         </div>
       </Link>
-      <button
-        type="button"
-        className="btn btn-cart btn-swipe"
-        onClick={() => {
-          add(product)
-          onAdded()
-        }}
-      >
-        <span className="btn-swipe-label">Add to cart</span>
-      </button>
+      <div className="card-actions">
+        <button
+          type="button"
+          className="btn btn-cart btn-swipe"
+          onClick={() => {
+            add(product)
+            onAdded()
+          }}
+        >
+          <span className="btn-swipe-label">Add to cart</span>
+        </button>
+        <button
+          type="button"
+          className="btn btn-buy-now"
+          onClick={() => {
+            add(product)
+            navigate('/checkout')
+          }}
+        >
+          Buy now
+        </button>
+      </div>
     </article>
   )
 }

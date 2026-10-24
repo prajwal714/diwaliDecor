@@ -15,6 +15,7 @@ import { UpiQrModal } from './UpiQrModal'
 import {
   BagIcon,
   QrIcon,
+  ShareIcon,
   CashIcon,
   CheckIcon,
   GiftIcon,
@@ -186,24 +187,33 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
           <button type="button" className="btn pdp-buy-now" onClick={handleBuyNow}>
             Buy it now
           </button>
-          <button
-            type="button"
-            className="btn pdp-buy-now qr-trigger"
-            onClick={() => setQrOpen(true)}
-          >
-            <QrIcon size={20} /> Pay by UPI QR
-          </button>
-          <a
-            className="btn pdp-wa"
-            href={chatUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <WhatsAppIcon /> Chat on WhatsApp
-          </a>
-          <button type="button" className="btn pdp-buy-now" onClick={handleShare}>
-            {shared ? 'Link copied!' : 'Share this product'}
-          </button>
+          <div className="pdp-quick">
+            <button
+              type="button"
+              className="pdp-quick-btn"
+              onClick={() => setQrOpen(true)}
+              title="Pay by UPI QR"
+            >
+              <QrIcon size={18} /> <span>UPI QR</span>
+            </button>
+            <a
+              className="pdp-quick-btn pdp-quick-wa"
+              href={chatUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Chat on WhatsApp"
+            >
+              <WhatsAppIcon size={18} /> <span>WhatsApp</span>
+            </a>
+            <button
+              type="button"
+              className="pdp-quick-btn"
+              onClick={handleShare}
+              title="Share this product"
+            >
+              <ShareIcon size={18} /> <span>{shared ? 'Copied!' : 'Share'}</span>
+            </button>
+          </div>
 
           <div className="pdp-perks">
             <div>

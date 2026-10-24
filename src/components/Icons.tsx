@@ -128,3 +128,12 @@ export const FeatherIcon = ({ size = 160 }: P) => (
     <path d="M40 60C28 64 20 76 22 92M40 60c12 4 20 16 18 32M40 84C32 88 28 98 30 108M40 84c8 4 12 14 10 24" />
   </svg>
 )
+
+export const ShareIcon = ({ size = 18 }: P) => (
+  <svg {...base(size)}>
+    <circle cx="18" cy="5" r="3" />
+    <circle cx="6" cy="12" r="3" />
+    <circle cx="18" cy="19" r="3" />
+    <path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4" />
+  </svg>
+)
