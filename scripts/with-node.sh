@@ -25,6 +25,14 @@ if [ -z "$node_bin" ] && pick /usr/local/bin/node; then
   node_bin=/usr/local/bin/node
 fi
 
+# CI / hosted builds (e.g. Vercel) and most setups: Node already on PATH
+if [ -z "$node_bin" ]; then
+  path_node="$(command -v node || true)"
+  if [ -n "$path_node" ] && pick "$path_node"; then
+    node_bin="$path_node"
+  fi
+fi
+
 if [ -z "$node_bin" ]; then
   echo "Need Node 20 or newer. Install it with: nvm install 24" >&2
   exit 1
