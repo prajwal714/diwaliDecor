@@ -75,6 +75,7 @@ export function Hero({ onShop }: Props) {
               slide.copyClass ? `banner-copy ${slide.copyClass}` : 'banner-copy'
             }
           >
+            <img className="banner-mark" src="/favicon.png" alt="" />
             <p className="banner-eyebrow">{slide.eyebrow}</p>
             <h1 className="banner-title">{slide.title}</h1>
             <p className="banner-text">{slide.text}</p>

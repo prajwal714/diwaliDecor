@@ -230,7 +230,7 @@ export function CheckoutPage() {
 
       <header className="co-header">
         <Link to="/" className="brand">
-          {shopConfig.brandName}
+          <img src="/logo.png" alt={shopConfig.brandName} width={640} height={314} />
         </Link>
         {!lastOrder && (
           <ol className="stepper" aria-label="Checkout progress">

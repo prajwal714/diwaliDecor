@@ -26,7 +26,7 @@ export function Header({ onOpenCart }: Props) {
       </div>
       <header className="header">
         <Link to="/" className="brand">
-          {shopConfig.brandName}
+          <img src="/logo.png" alt={shopConfig.brandName} width={640} height={314} />
         </Link>
         <nav className="header-nav">
           <button type="button" className="nav-link" onClick={goShop}>

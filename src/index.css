@@ -2511,3 +2511,86 @@ h3 {
   gap: 0.5rem;
   min-height: 52px;
 }
+
+/* Logo image in header / checkout */
+.brand {
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand img {
+  display: block;
+  width: auto;
+  height: 76px;
+}
+
+@media (max-width: 600px) {
+  .brand img {
+    height: 60px;
+  }
+}
+
+.header {
+  padding-left: clamp(1rem, 3vw, 2.5rem);
+  padding-right: clamp(1rem, 3vw, 2.5rem);
+}
+
+.nav-link,
+.cart-icon-btn {
+  border-radius: var(--radius-sm);
+  border-bottom: none;
+  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.nav-link {
+  font-size: 1.15rem;
+  font-weight: 600;
+  padding: 0.5rem 0.9rem;
+}
+
+.nav-link:hover,
+.cart-icon-btn:hover {
+  border-bottom: none;
+  background: rgba(22, 63, 140, 0.06);
+  color: var(--blue);
+  transform: translateY(-2px);
+}
+
+.cart-icon-btn svg {
+  width: 32px;
+  height: 32px;
+}
+
+.co-header .brand img {
+  height: 56px;
+}
+
+@media (max-width: 560px) {
+  .brand img {
+    height: 44px;
+  }
+}
+
+.banner-mark {
+  display: block;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 0.6rem;
+  border-radius: 50%;
+  opacity: 0.85;
+  box-shadow: 0 0 0 2px rgba(184, 134, 59, 0.55), 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+@media (max-width: 600px) {
+  .banner-mark {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.footer-logo {
+  display: block;
+  height: 80px;
+  width: auto;
+  margin: 0 auto 0.75rem;
+}
