@@ -488,9 +488,6 @@ export function CheckoutPage() {
                         <a className="btn btn-secondary btn-block" href={buildUpiUri(subtotal)}>
                           Pay {formatINR(subtotal)} with UPI app
                         </a>
-                        <p className="upi-id">
-                          UPI ID: <strong>{shopConfig.upiId}</strong>
-                        </p>
                       </>
                     ) : (
                       <img

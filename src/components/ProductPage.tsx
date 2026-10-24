@@ -5,6 +5,7 @@ import {
   getProduct,
   getSimilarProducts,
 } from '../data/products'
+import { shopConfig } from '../config'
 import { useCart } from '../context/CartContext'
 import { chatUrl, formatINR } from '../utils/whatsapp'
 import { Stars } from './Stars'
@@ -14,6 +15,7 @@ import { UpiQrModal } from './UpiQrModal'
 import {
   BagIcon,
   QrIcon,
+  ShareIcon,
   CashIcon,
   CheckIcon,
   GiftIcon,
@@ -35,6 +37,23 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
   const [qrOpen, setQrOpen] = useState(false)
   const [zoomIndex, setZoomIndex] = useState<number | null>(null)
   const [qty, setQty] = useState(1)
+  const [shared, setShared] = useState(false)
+
+  async function handleShare() {
+    if (!product) return
+    const url = `${shopConfig.siteUrl}/product/${product.id}`
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: product.name, text: product.name, url })
+      } catch {
+        /* user cancelled */
+      }
+      return
+    }
+    await navigator.clipboard?.writeText(url)
+    setShared(true)
+    setTimeout(() => setShared(false), 2000)
+  }
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -168,21 +187,33 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
           <button type="button" className="btn pdp-buy-now" onClick={handleBuyNow}>
             Buy it now
           </button>
-          <button
-            type="button"
-            className="btn pdp-buy-now qr-trigger"
-            onClick={() => setQrOpen(true)}
-          >
-            <QrIcon size={20} /> Pay by UPI QR
-          </button>
-          <a
-            className="btn pdp-wa"
-            href={chatUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <WhatsAppIcon /> Chat on WhatsApp
-          </a>
+          <div className="pdp-quick">
+            <button
+              type="button"
+              className="pdp-quick-btn"
+              onClick={() => setQrOpen(true)}
+              title="Pay by UPI QR"
+            >
+              <QrIcon size={18} /> <span>UPI QR</span>
+            </button>
+            <a
+              className="pdp-quick-btn pdp-quick-wa"
+              href={chatUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Chat on WhatsApp"
+            >
+              <WhatsAppIcon size={18} /> <span>WhatsApp</span>
+            </a>
+            <button
+              type="button"
+              className="pdp-quick-btn"
+              onClick={handleShare}
+              title="Share this product"
+            >
+              <ShareIcon size={18} /> <span>{shared ? 'Copied!' : 'Share'}</span>
+            </button>
+          </div>
 
           <div className="pdp-perks">
             <div>
