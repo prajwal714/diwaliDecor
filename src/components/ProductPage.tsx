@@ -5,6 +5,7 @@ import {
   getProduct,
   getSimilarProducts,
 } from '../data/products'
+import { shopConfig } from '../config'
 import { useCart } from '../context/CartContext'
 import { chatUrl, formatINR } from '../utils/whatsapp'
 import { Stars } from './Stars'
@@ -35,6 +36,23 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
   const [qrOpen, setQrOpen] = useState(false)
   const [zoomIndex, setZoomIndex] = useState<number | null>(null)
   const [qty, setQty] = useState(1)
+  const [shared, setShared] = useState(false)
+
+  async function handleShare() {
+    if (!product) return
+    const url = `${shopConfig.siteUrl}/product/${product.id}`
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: product.name, text: product.name, url })
+      } catch {
+        /* user cancelled */
+      }
+      return
+    }
+    await navigator.clipboard?.writeText(url)
+    setShared(true)
+    setTimeout(() => setShared(false), 2000)
+  }
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -183,6 +201,9 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
           >
             <WhatsAppIcon /> Chat on WhatsApp
           </a>
+          <button type="button" className="btn pdp-buy-now" onClick={handleShare}>
+            {shared ? 'Link copied!' : 'Share this product'}
+          </button>
 
           <div className="pdp-perks">
             <div>
