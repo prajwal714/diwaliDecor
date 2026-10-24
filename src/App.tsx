@@ -40,7 +40,12 @@ function AppShell() {
           />
           <Route
             path="/product/:id"
-            element={<ProductPage onAdded={openCart} />}
+            element={
+              <ProductPage
+                onAdded={openCart}
+                onBuyNow={() => setCheckoutOpen(true)}
+              />
+            }
           />
         </Routes>
       </main>

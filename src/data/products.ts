@@ -1,4 +1,6 @@
-export type Category = 'Toran' | 'Wall hanging' | 'Door hanging' | 'Bundle'
+import productImages from 'virtual:product-images'
+
+export type Category = 'Toran'
 
 export type Review = {
   id: string
@@ -16,316 +18,198 @@ export type Product = {
   category: Category
   price: number
   description: string
+  /** Main image (first of `images`) */
   image: string
+  /** All images from public/products/<imageKey>/ (see vite.config.ts) */
   images: string[]
   features: string[]
   details: string
+  badge?: string
   reviews: Review[]
 }
 
-export const categories: Array<Category | 'All'> = [
-  'All',
-  'Toran',
-  'Wall hanging',
-  'Door hanging',
-  'Bundle',
+export const categories: Array<Category | 'All'> = ['All', 'Toran']
+
+type ProductSeed = Omit<Product, 'image' | 'images'> & { imageKey: string }
+
+const seeds: ProductSeed[] = [
+  {
+    id: 'toran-10001',
+    imageKey: '10001',
+    name: "Madhuvan – Handcrafted Radha-Krishna Floral Toran",
+    category: 'Toran',
+    price: 3000,
+    description:
+      "Bring home the divine essence of Vrindavan this festive season. The Madhuvan Toran features handcrafted artwork depicting Radha-Krishna on a jhula, flanked by protective evil-eye motifs with cowrie shells, lush florals, and vibrant parrots. An ideal centerpiece for your main doorway to welcome positivity, grace, and festive warmth.",
+    features: [
+      "Centerpiece Motif: Intricately detailed Radha-Krishna artwork on a swing.",
+      "Auspicious Elements: Handcrafted Evil Eye discs framed with traditional Kaudi (cowrie) shells for protection and auspiciousness.",
+      "Floral Splendor: Premium artificial marigolds, roses, dahlia accents, and lush green parrots on an embroidered lace base.",
+      "Reusable & Long-Lasting: Premium materials that retain their vibrant colors year after year.",
+      "Easy Installation: Lightweight construction with secure side loops for effortless hanging.",
+    ],
+    details:
+      "Standard length 40 inches (fits most main entrance doors). Custom length available at ₹50 per inch — message us on WhatsApp. 100% handcrafted. Care: Gently dust with a soft dry cloth or soft brush after use. Store flat in a dry box to preserve shape and vibrant colors for future festivities. Perfect for Diwali main door entrances, mandir backdrops, pooja room doorways and festive photo walls. Comes securely packed in protective festive packaging, a lovely housewarming gift.",
+    reviews: [],
+  },
+  {
+    id: 'toran-10002',
+    imageKey: '10002',
+    name: "Nathdwara – Handcrafted Shreenathji Royal Floral Toran",
+    category: 'Toran',
+    price: 2000,
+    description:
+      "Experience divine elegance with a modern aesthetic. The Nathdwara Toran features an embroidered centerpiece of Lord Shreenathji set against a rich dark backdrop, framed by muted slate-grey dahlias, ivory roses, evil-eye motifs, and vibrant yellow hanging jhumkas.",
+    features: [
+      "Divine Centerpiece: Detailed facial motif of Lord Shreenathji framed in a layered rosette border.",
+      "Contemporary Color Palette: Unique fusion of royal navy blue, charcoal grey, ivory white, and gold lacework.",
+      "Protection & Auspiciousness: Hand-beaded Evil Eye circular discs to ward off negative vibes.",
+      "Charming Latkans: Finished with bright yellow silk-thread hanging jhumkas with beaded tassels for a touch of classic Indian warmth.",
+    ],
+    details:
+      "Standard length 40 inches (fits most main entrance doors). Custom length available at ₹50 per inch — message us on WhatsApp. 100% handcrafted. Care: Gently dust with a soft dry cloth or soft brush after use. Store flat in a dry box to preserve shape and vibrant colors for future festivities. Perfect for Diwali main door entrances, mandir backdrops, pooja room doorways and festive photo walls. Comes securely packed in protective festive packaging, a lovely housewarming gift.",
+    reviews: [],
+  },
+  {
+    id: 'toran-10003',
+    imageKey: '10003',
+    name: "Mayura – Handcrafted Royal Peacock Floral Toran",
+    category: 'Toran',
+    price: 2000,
+    description:
+      "Welcome regal charm into your home with the Mayura Toran. Featuring a velvet peacock motif crowned with natural feather plumage, this statement piece is adorned with a lush floral bouquet of sky blue, magenta, and sage green blooms. Complete with hand-beaded evil-eye accents and intricate gold mirror-work lace.",
+    features: [
+      "Regal Peacock Centerpiece: A 3D velvet blue peacock surrounded by a fan of natural peacock feathers embellished with stone & pearl detailing.",
+      "Vibrant Garden Palette: A rich harmony of sky blue dahlias, magenta peonies, navy roses, and deep forest green foliage.",
+      "Ward Off Negativity: Includes evil-eye discs bordered with natural cowrie (kaudi) shells for protection and traditional grace.",
+      "Ornate Lace Base: Built on a heavy gold cutwork lace border lined with pearl droplets and mirror work.",
+      "Durable & Reusable: Premium faux florals and sturdy craftsmanship ensure long-lasting beauty for seasons to come.",
+    ],
+    details:
+      "Standard length 40 inches (fits most main entrance doors). Custom length available at ₹50 per inch — message us on WhatsApp. 100% handcrafted. Care: Gently dust with a soft dry cloth or soft brush after use. Store flat in a dry box to preserve shape and vibrant colors for future festivities. Perfect for Diwali main door entrances, mandir backdrops, pooja room doorways and festive photo walls. Comes securely packed in protective festive packaging, a lovely housewarming gift.",
+    reviews: [],
+  },
+  {
+    id: 'toran-10004',
+    imageKey: '10004',
+    name: "Shubh Labh Shreenath – Handcrafted Traditional Festive Toran",
+    category: 'Toran',
+    price: 2000,
+    description:
+      "Invite divine blessings, prosperity, and joy into your home with the Shubh Labh Shreenath Toran. Handcrafted with a stunning Shreenathji motif at its heart, this piece features traditional Shubh-Labh medallions, golden lotuses, colorful peacocks, and warm marigold blooms. Set on an ornate gold cutwork lace border.",
+    features: [
+      "Divine Centerpiece: Hand-embroidered Shreenathji face artwork framed in an intricate lotus base with mirror & pearl embellishments.",
+      "Auspicious Motifs: Features circular beaded Shubh (Auspiciousness) and Labh (Prosperity) medallions.",
+      "Golden Lotus & Peacock Accents: Flanked by sparkling golden lotus flowers and hand-crafted artistic peacocks.",
+      "Festive Color Accent: Anchored at both ends with bright marigold-orange dahlias on a heavy golden lace background.",
+      "Traditional & Sleek: Sits flat and clean against your door frame for an elegant, non-bulky traditional look.",
+    ],
+    details:
+      "Standard length 40 inches (fits most main entrance doors). Custom length available at ₹50 per inch — message us on WhatsApp. 100% handcrafted. Care: Gently dust with a soft dry cloth or soft brush after use. Store flat in a dry box to preserve shape and vibrant colors for future festivities. Perfect for Diwali main door entrances, mandir backdrops, pooja room doorways and festive photo walls. Comes securely packed in protective festive packaging, a lovely housewarming gift.",
+    reviews: [],
+  },
+  {
+    id: 'toran-10005',
+    imageKey: '10005',
+    name: "Gajraj – Handcrafted Royal Elephant & Pleated Tissue Toran",
+    category: 'Toran',
+    price: 2000,
+    description:
+      "Bring home majestic royal heritage with the Gajraj Toran. Handcrafted with a procession of beaded elephant motifs (Gaja) interspersed with crisp white dahlia medallions, warm mustard accents, and delicate pearl hangings. Anchored by a flowing, pleated golden tissue veil.",
+    features: [
+      "Royal Elephant Motifs: Intricately hand-beaded ivory & brown elephant figures symbolizing strength, wisdom, and good fortune.",
+      "Flowing Pleated Drape: Ethereal sheer-gold tissue drape with pearl-trimmed scalloped edges that frames the doorway gracefully.",
+      "Intricate Medallions: Woven circular discs topped with pristine white dahlia blooms and golden leaf sprigs.",
+      "Pearl & Lace Craftsmanship: Built on a heavy gold cutwork lace border lined with delicate pearl clusters and mirror accents.",
+      "Statement Heritage Look: Blends traditional Gaja motifs with modern luxe textile design.",
+    ],
+    details:
+      "Standard length 40 inches (fits most main entrance doors). Custom length available at ₹50 per inch — message us on WhatsApp. 100% handcrafted. Care: Gently dust with a soft dry cloth or soft brush after use. Store flat in a dry box to preserve shape and vibrant colors for future festivities. Perfect for Diwali main door entrances, mandir backdrops, pooja room doorways and festive photo walls. Comes securely packed in protective festive packaging, a lovely housewarming gift.",
+    reviews: [],
+  },
+  {
+    id: 'toran-10006',
+    imageKey: '10006',
+    name: "Raghukul – Handcrafted Crimson Velvet Embroidered Toran",
+    category: 'Toran',
+    price: 2000,
+    description:
+      "Experience classic royal heritage with the Raghukul Toran. Crafted on a luxurious crimson-red velvet band, this piece showcases intricate gold thread and sequin embroidery depicting traditional bird and floral vine motifs. Complete with a shimmering mirror-work top trim and a rich golden tassel fringe.",
+    features: [
+      "Rich Velvet Base: Crafted on soft, high-quality crimson red velvet for a deeply festive and regal finish.",
+      "Intricate Heritage Embroidery: Detailed gold zari thread embroidery featuring paired birds, vines, and glittering sequin highlights.",
+      "Cascading Golden Fringe: Trimmed along the lower edge with a fine metallic gold tassel border (Jhalar) that sways gracefully with motion.",
+      "Triangle Mirror Trim: Lined with a sparkling geometric mirror-work top border to catch and reflect festive lights.",
+      "Sleek & Durable: Compact, lightweight design with sturdy end rings for easy hanging without sagging.",
+    ],
+    details:
+      "Standard length 40 inches (fits most main entrance doors). Custom length available at ₹50 per inch — message us on WhatsApp. 100% handcrafted. Care: Gently dust with a soft dry cloth or soft brush after use. Store flat in a dry box to preserve shape and vibrant colors for future festivities. Perfect for Diwali main door entrances, mandir backdrops, pooja room doorways and festive photo walls. Comes securely packed in protective festive packaging, a lovely housewarming gift.",
+    reviews: [],
+  },
+  {
+    id: 'toran-10007',
+    imageKey: '10007',
+    name: "Subh Laxmi – Handcrafted Divine Floral Festive Toran",
+    category: 'Toran',
+    price: 2000,
+    description:
+      "Invite wealth, harmony, and divine grace into your home with the Subh Laxmi Toran. Crafted around a central motif of Goddess Lakshmi seated on a lotus, this design is adorned with delicate pink roses, tropical greenery, peacock accents, and pearl-encrusted Shubh-Labh lotus medallions. Built on a vibrant mirror-studded lace border, it is the ultimate masterpiece for Diwali and Laxmi Puja.",
+    features: [
+      "Divine Centerpiece: Features Goddess Lakshmi seated in grace on a lotus blossom framed by ornate backing.",
+      "Auspicious End Medallions: Vibrant hot-pink lotus-petal medallions housing pearl-beaded Shubh and Labh calligraphic centers.",
+      "Floral & Peacock Artistry: A harmonious blend of soft pink tea roses, crisp white blooms, palm leaf sprays, and miniature peacock accents.",
+      "Pearl & Diamond Lattice Details: Diamond-framed rose nests encrusted with pearl borders and subtle mirror highlights.",
+      "Exquisite Scalloped Base: Trimmed with a detailed gold cutwork lace featuring multi-colored stone and mirror droplets.",
+    ],
+    details:
+      "Standard length 40 inches (fits most main entrance doors). Custom length available at ₹50 per inch — message us on WhatsApp. 100% handcrafted. Care: Gently dust with a soft dry cloth or soft brush after use. Store flat in a dry box to preserve shape and vibrant colors for future festivities. Perfect for Diwali main door entrances, mandir backdrops, pooja room doorways and festive photo walls. Comes securely packed in protective festive packaging, a lovely housewarming gift.",
+    reviews: [],
+  },
+  {
+    id: 'toran-10008',
+    imageKey: '10008',
+    name: "Vighnaharta – Handcrafted Ganesha & Kamadhenu Festive Toran",
+    category: 'Toran',
+    price: 1350,
+    badge: 'Customer Favorite · Best Value',
+    description:
+      "Welcome prosperity, peace, and good fortune into your home with our bestselling Vighnaharta Toran. Crafted around a central seated Lord Ganesha motif, this piece features hand-beaded Shubh-Labh medallions framed with natural cowrie shells, sacred Kamadhenu cows, vibrant festive marigolds, and a cascading pearl-bead mesh border. The ultimate traditional charm for your main entrance!",
+    features: [
+      "Divine Centerpiece: Hand-embroidered Lord Ganesha seated in a pearl-encrusted golden sunburst ring.",
+      "Sacred Motifs: Features detailed beaded Kamadhenu (sacred cow) artwork symbolizing peace, purity, and wish-fulfillment.",
+      "Shubh & Labh Blessings: Circular red-and-gold Shubh & Labh medallions bordered with natural cowrie (kaudi) shells.",
+      "Cascading Pearl Mesh: Finished along the lower edge with a delicate, continuous woven pearl-bead mesh lattice drop.",
+      "Rich Festive Colors: Crimson red, golden yellow marigold dahlias, and zardozi lotus accents.",
+    ],
+    details:
+      "Standard length 40 inches (fits most main entrance doors). Custom length available at ₹50 per inch — message us on WhatsApp. 100% handcrafted. Care: Gently dust with a soft dry cloth or soft brush after use. Store flat in a dry box to preserve shape and vibrant colors for future festivities. Perfect for Diwali main door entrances, mandir backdrops, pooja room doorways and festive photo walls. Comes securely packed in protective festive packaging, a lovely housewarming gift.",
+    reviews: [],
+  },
+  {
+    id: 'toran-10009',
+    imageKey: '10009',
+    name: "Neelam – Handcrafted Pearl & Royal Blue Pleated Luxury Toran",
+    category: 'Toran',
+    price: 2000,
+    description:
+      "Redefine festive luxury with the Neelam Toran. Designed in a captivating palette of pristine white, silver sequins, and rich royal blue velvet, this masterpiece features three-dimensional embroidered fan medallions, crisp dahlia blooms, hanging pearl tassels, and a soft pleated sheer tissue drape. A sophisticated statement piece for modern luxury homes!",
+    features: [
+      "Ethereal Sheer Drape: Finished with a pleated white-silver tissue veil that creates a graceful archway drop over your entrance.",
+      "Royal Blue Velvet Accents: Striking royal blue velvet petals embedded within silver sequin fan-blooms.",
+      "Pristine Floral Artistry: 3D white dahlia and chrysanthemum blooms layered over pearl-encrusted star motifs.",
+      "Hanging Pearl Latkans: Lined with weighted pearl-bead tassels (latkans) that dangle gracefully across the band.",
+      "Intricate Lace Base: Crafted on a heavy gold-and-silver cutwork lace border topped with a royal blue lace scalloped crown.",
+    ],
+    details:
+      "Standard length 40 inches (fits most main entrance doors). Custom length available at ₹50 per inch — message us on WhatsApp. 100% handcrafted. Care: Gently dust with a soft dry cloth or soft brush after use. Store flat in a dry box to preserve shape and vibrant colors for future festivities. Perfect for Diwali main door entrances, mandir backdrops, pooja room doorways and festive photo walls. Comes securely packed in protective festive packaging, a lovely housewarming gift.",
+    reviews: [],
+  },
 ]
 
-const img = (id: string, extras = '') =>
-  `https://images.unsplash.com/${id}?w=1200&h=1200&fit=crop&q=80${extras}`
-
-export const products: Product[] = [
-  {
-    id: 'toran-marigold',
-    name: 'Marigold Bandhanwar Toran',
-    category: 'Toran',
-    price: 499,
-    description:
-      'Handcrafted marigold and pearl toran for your main door. Bright, festive, and easy to hang.',
-    image: img('photo-1604608672516-f1b9b1c37076'),
-    images: [
-      img('photo-1604608672516-f1b9b1c37076'),
-      img('photo-1605649487212-47bdab064df7'),
-      img('photo-1635322966219-b75ed372eb01'),
-    ],
-    features: [
-      'Handmade with marigold motifs & pearl beads',
-      'Fits most apartment & villa doorways',
-      'Lightweight — hangs with hooks or nails',
-      'Packed for Bangalore doorstep delivery',
-    ],
-    details:
-      'Length approx. 3–3.5 ft. Wipe gently with a dry cloth. Keep away from continuous moisture. Perfect for Diwali, housewarmings, and festive weekends.',
-    reviews: [
-      {
-        id: 'r1',
-        name: 'Ananya R.',
-        rating: 5,
-        date: 'Oct 2025',
-        title: 'Looks stunning on our Indiranagar door',
-        body: 'Bright and festive without being garish. Hung it in under a minute — guests noticed immediately.',
-        verified: true,
-      },
-      {
-        id: 'r2',
-        name: 'Karthik M.',
-        rating: 4,
-        date: 'Sep 2025',
-        title: 'Great quality for the price',
-        body: 'Beads are neat and the colours are rich. Ordered a second one for the balcony door.',
-        verified: true,
-      },
-    ],
-  },
-  {
-    id: 'toran-mirror',
-    name: 'Mirror Work Toran',
-    category: 'Toran',
-    price: 799,
-    description:
-      'Traditional mirror and beadwork toran that catches the light — a Bangalore favourite for Diwali.',
-    image: img('photo-1605649487212-47bdab064df7'),
-    images: [
-      img('photo-1605649487212-47bdab064df7'),
-      img('photo-1604608672516-f1b9b1c37076'),
-      img('photo-1578662996442-48f60103fc96'),
-    ],
-    features: [
-      'Mirror & bead detailing that sparkles in evening light',
-      'Traditional festive look for main entrances',
-      'Reinforced hanging loops',
-      'Pairs beautifully with fairy lights',
-    ],
-    details:
-      'Hand-finished mirror work. Approximate span 3 ft. Store flat when not in use. Ideal for Lakshmi Puja décor.',
-    reviews: [
-      {
-        id: 'r3',
-        name: 'Priya S.',
-        rating: 5,
-        date: 'Oct 2025',
-        title: 'Exactly like the photos',
-        body: 'The mirrors catch our porch lights so well. Feels premium and festive.',
-        verified: true,
-      },
-    ],
-  },
-  {
-    id: 'wall-diya',
-    name: 'Diya Motif Wall Hanging',
-    category: 'Wall hanging',
-    price: 649,
-    description:
-      'Warm diya motifs on fabric — hang in the living room or entryway for instant festive glow.',
-    image: img('photo-1578662996442-48f60103fc96'),
-    images: [
-      img('photo-1578662996442-48f60103fc96'),
-      img('photo-1635322966219-b75ed372eb01'),
-      img('photo-1605649487212-47bdab064df7'),
-    ],
-    features: [
-      'Warm diya motif design for living rooms',
-      'Ready-to-hang with wall hooks',
-      'Soft fabric that won’t scratch paint',
-      'Makes a lovely housewarming gift',
-    ],
-    details:
-      'Approx. 18–22 inches wide. Spot clean only. Looks best against light walls or near brass accents.',
-    reviews: [
-      {
-        id: 'r4',
-        name: 'Meera K.',
-        rating: 5,
-        date: 'Oct 2025',
-        title: 'Living room ready',
-        body: 'Hung above our console with diyas below — whole corner feels festive.',
-        verified: true,
-      },
-      {
-        id: 'r5',
-        name: 'Rohan D.',
-        rating: 4,
-        date: 'Sep 2025',
-        title: 'Nice texture',
-        body: 'Colours are softer in person, which we preferred. Good finish.',
-      },
-    ],
-  },
-  {
-    id: 'wall-mandala',
-    name: 'Golden Mandala Wall Piece',
-    category: 'Wall hanging',
-    price: 899,
-    description:
-      'Statement mandala wall hanging in gold tones. Pairs well with fairy lights and brass accents.',
-    image: img('photo-1635322966219-b75ed372eb01'),
-    images: [
-      img('photo-1635322966219-b75ed372eb01'),
-      img('photo-1578662996442-48f60103fc96'),
-      img('photo-1604608672516-f1b9b1c37076'),
-    ],
-    features: [
-      'Statement gold-tone mandala for feature walls',
-      'Works with fairy lights & brass décor',
-      'Sturdy backing for easy mounting',
-      'Eye-catching for puja rooms & living spaces',
-    ],
-    details:
-      'Diameter approx. 16–20 inches. Wipe with dry cloth. Avoid hanging in humid bathrooms.',
-    reviews: [
-      {
-        id: 'r6',
-        name: 'Sneha P.',
-        rating: 5,
-        date: 'Oct 2025',
-        title: 'Statement piece',
-        body: 'Looks rich next to our brass diyas. Packaging was careful too.',
-        verified: true,
-      },
-    ],
-  },
-  {
-    id: 'door-bell',
-    name: 'Temple Bell Door Hanging',
-    category: 'Door hanging',
-    price: 549,
-    description:
-      'Soft-chime door hanging with bells and beads. Welcome guests the festive way.',
-    image: img('photo-1518709268805-4e9042af9f23'),
-    images: [
-      img('photo-1518709268805-4e9042af9f23'),
-      img('photo-1544551763-46a013bb70d5'),
-      img('photo-1605649487212-47bdab064df7'),
-    ],
-    features: [
-      'Soft temple-bell chime when the door moves',
-      'Bead & bell mix for a traditional look',
-      'Compact for flat doors',
-      'Easy hook mount — no drilling needed',
-    ],
-    details:
-      'Length approx. 12–16 inches. Bells are decorative with a soft tone. Keep out of reach of toddlers if needed.',
-    reviews: [
-      {
-        id: 'r7',
-        name: 'Divya N.',
-        rating: 5,
-        date: 'Oct 2025',
-        title: 'Such a warm welcome',
-        body: 'Soft chime every time someone enters — kids love it too.',
-        verified: true,
-      },
-    ],
-  },
-  {
-    id: 'door-lotus',
-    name: 'Lotus Charm Door Hanging',
-    category: 'Door hanging',
-    price: 449,
-    description:
-      'Compact lotus and bead door hanging — ideal for apartments and flat doors.',
-    image: img('photo-1544551763-46a013bb70d5'),
-    images: [
-      img('photo-1544551763-46a013bb70d5'),
-      img('photo-1518709268805-4e9042af9f23'),
-      img('photo-1604608672516-f1b9b1c37076'),
-    ],
-    features: [
-      'Compact lotus charm for apartment doors',
-      'Lightweight beads — won’t strain the handle',
-      'Festive without overwhelming small entryways',
-      'Budget-friendly accent piece',
-    ],
-    details:
-      'Length approx. 10–14 inches. Spot clean. Great paired with a matching toran.',
-    reviews: [
-      {
-        id: 'r8',
-        name: 'Aditi V.',
-        rating: 4,
-        date: 'Sep 2025',
-        title: 'Cute for our flat',
-        body: 'Perfect size for our Whitefield apartment door. Wish there was a larger option too.',
-        verified: true,
-      },
-    ],
-  },
-  {
-    id: 'bundle-entry',
-    name: 'Entryway Festive Bundle',
-    category: 'Bundle',
-    price: 1499,
-    description:
-      'Toran + door hanging + wall piece set for a complete main-door look. Best value for families.',
-    image: img('photo-1604608672516-f1b9b1c37076', '&sat=-20'),
-    images: [
-      img('photo-1604608672516-f1b9b1c37076', '&sat=-20'),
-      img('photo-1518709268805-4e9042af9f23'),
-      img('photo-1635322966219-b75ed372eb01'),
-    ],
-    features: [
-      'Complete entryway set: toran + door hanging + wall piece',
-      'Coordinated festive palette',
-      'Best value vs buying separately',
-      'Ready for Diwali weekend styling',
-    ],
-    details:
-      'Includes three pieces curated to match. See individual care notes for fabric and metal parts. Ideal gift for families setting up a new home.',
-    reviews: [
-      {
-        id: 'r9',
-        name: 'Neha & Arjun',
-        rating: 5,
-        date: 'Oct 2025',
-        title: 'Whole entrance transformed',
-        body: 'Bought the bundle for our new house in HSR. Everything matched and arrived together.',
-        verified: true,
-      },
-      {
-        id: 'r10',
-        name: 'Vikram T.',
-        rating: 5,
-        date: 'Oct 2025',
-        title: 'Worth it',
-        body: 'Cheaper than buying pieces separately and looks intentional as a set.',
-        verified: true,
-      },
-    ],
-  },
-  {
-    id: 'bundle-living',
-    name: 'Living Room Glow Bundle',
-    category: 'Bundle',
-    price: 1299,
-    description:
-      'Two wall hangings curated for living rooms — ready to style for Lakshmi Puja gatherings.',
-    image: img('photo-1605649487212-47bdab064df7', '&sat=-10'),
-    images: [
-      img('photo-1605649487212-47bdab064df7', '&sat=-10'),
-      img('photo-1578662996442-48f60103fc96'),
-      img('photo-1635322966219-b75ed372eb01'),
-    ],
-    features: [
-      'Two complementary wall hangings',
-      'Styled for living rooms & puja corners',
-      'Gift-ready packaging',
-      'Balanced colours for modern Bangalore homes',
-    ],
-    details:
-      'Two pieces. Mount with wall hooks. Soft lighting or fairy lights enhance the set.',
-    reviews: [
-      {
-        id: 'r11',
-        name: 'Lakshmi G.',
-        rating: 5,
-        date: 'Sep 2025',
-        title: 'Perfect for puja guests',
-        body: 'Our living room felt ready for Lakshmi Puja without overcrowding the walls.',
-        verified: true,
-      },
-    ],
-  },
-]
+export const products: Product[] = seeds.map(({ imageKey, ...rest }) => {
+  const images = productImages[imageKey] ?? []
+  return { ...rest, image: images[0] ?? '', images }
+})
 
 export function getProduct(id: string) {
   return products.find((p) => p.id === id)

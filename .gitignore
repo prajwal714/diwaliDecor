@@ -26,3 +26,6 @@ dist-ssr
 # Reference screenshots (not part of the site)
 atrangistudio.com-*.png
 *.png.orig
+
+# Raw product photos/docs (not part of the site)
+originals/

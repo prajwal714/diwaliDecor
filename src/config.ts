@@ -1,6 +1,6 @@
 export const shopConfig = {
   brandName: 'Devamkart',
-  tagline: 'Festive wall & door decor for Bangalore homes',
+  tagline: 'Handcrafted festive torans for Bangalore homes',
   /** WhatsApp number with country code, digits only */
   whatsappNumber: '917838363629',
   /** WhatsApp Business short link (no prefilled text support) */

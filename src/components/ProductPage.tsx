@@ -6,24 +6,36 @@ import {
   getSimilarProducts,
 } from '../data/products'
 import { useCart } from '../context/CartContext'
-import { formatINR } from '../utils/whatsapp'
+import { chatUrl, formatINR } from '../utils/whatsapp'
 import { Stars } from './Stars'
 import { ProductCard } from './ProductCard'
+import { Lightbox } from './Lightbox'
+import {
+  BagIcon,
+  CashIcon,
+  CheckIcon,
+  GiftIcon,
+  SparkIcon,
+  TruckIcon,
+  WhatsAppIcon,
+  ZoomIcon,
+} from './Icons'
 
 type Props = {
   onAdded: () => void
+  onBuyNow: () => void
 }
 
-export function ProductPage({ onAdded }: Props) {
+export function ProductPage({ onAdded, onBuyNow }: Props) {
   const { id } = useParams<{ id: string }>()
   const product = id ? getProduct(id) : undefined
   const { add } = useCart()
-  const [activeImage, setActiveImage] = useState(0)
+  const [zoomIndex, setZoomIndex] = useState<number | null>(null)
   const [qty, setQty] = useState(1)
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
-    setActiveImage(0)
+    setZoomIndex(null)
     setQty(1)
   }, [id])
 
@@ -48,6 +60,11 @@ export function ProductPage({ onAdded }: Props) {
     onAdded()
   }
 
+  function handleBuyNow() {
+    add(product!, qty)
+    onBuyNow()
+  }
+
   return (
     <div className="product-page">
       <nav className="breadcrumb" aria-label="Breadcrumb">
@@ -60,44 +77,64 @@ export function ProductPage({ onAdded }: Props) {
 
       <section className="pdp">
         <div className="pdp-gallery">
-          <div className="pdp-main-image">
-            <img
-              src={product.images[activeImage] ?? product.image}
-              alt={product.name}
-              width={1200}
-              height={1200}
-            />
-          </div>
-          <div className="pdp-thumbs" role="list">
-            {product.images.map((src, i) => (
-              <button
-                key={src + i}
-                type="button"
-                role="listitem"
-                className={i === activeImage ? 'thumb active' : 'thumb'}
-                onClick={() => setActiveImage(i)}
-                aria-label={`View image ${i + 1}`}
-              >
-                <img src={src} alt="" width={120} height={120} />
-              </button>
-            ))}
-          </div>
+          {product.images.map((src, i) => (
+            <button
+              key={src}
+              type="button"
+              className={i === 0 ? 'pdp-img pdp-img-main' : 'pdp-img'}
+              onClick={() => setZoomIndex(i)}
+              aria-label={`Zoom image ${i + 1}`}
+            >
+              <img src={src} alt={`${product.name} — view ${i + 1}`} />
+              <span className="pdp-zoom-hint">
+                <ZoomIcon /> Zoom
+              </span>
+            </button>
+          ))}
         </div>
 
         <div className="pdp-info">
           <h1>{product.name}</h1>
-          <div className="pdp-rating-row">
-            <Stars rating={avg} />
-            <span>
-              {avg.toFixed(1)} · {product.reviews.length} review
-              {product.reviews.length === 1 ? '' : 's'}
-            </span>
-          </div>
+          {product.badge && <span className="badge">{product.badge}</span>}
+          {product.reviews.length > 0 && (
+            <div className="pdp-rating-row">
+              <Stars rating={avg} />
+              <span>
+                {avg.toFixed(1)} · {product.reviews.length} review
+                {product.reviews.length === 1 ? '' : 's'}
+              </span>
+            </div>
+          )}
           <p className="pdp-price">{formatINR(product.price)}</p>
-          <p className="pdp-lead">{product.description}</p>
+          <p className="pdp-size-note">
+            Standard size 40 inches. Need a different length? Custom sizes are
+            ₹50 per inch —{' '}
+            <a href={chatUrl()} target="_blank" rel="noopener noreferrer">
+              message us on WhatsApp
+            </a>
+            .
+          </p>
 
-          <div className="pdp-qty">
-            <span>Quantity</span>
+          <div className="pdp-love">
+            <span className="pdp-love-tag">Why you’ll love it</span>
+            <ul>
+              {product.features.slice(0, 4).map((f) => (
+                <li key={f}>
+                  <SparkIcon />
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <p className="pdp-delivery">
+            <TruckIcon size={22} />
+            <span>
+              Delivery across <strong>Bangalore</strong> · Confirm on WhatsApp
+            </span>
+          </p>
+
+          <div className="pdp-buy-row">
             <div className="qty-control">
               <button
                 type="button"
@@ -115,27 +152,72 @@ export function ProductPage({ onAdded }: Props) {
                 +
               </button>
             </div>
-          </div>
-
-          <div className="pdp-actions">
             <button
               type="button"
-              className="btn btn-cart btn-swipe btn-block"
+              className="btn btn-cart btn-swipe pdp-add"
               onClick={handleAdd}
             >
-              <span className="btn-swipe-label">Add to cart</span>
+              <span className="btn-swipe-label">
+                <BagIcon /> Add to cart
+              </span>
             </button>
           </div>
+          <button type="button" className="btn pdp-buy-now" onClick={handleBuyNow}>
+            Buy it now
+          </button>
+          <a
+            className="btn pdp-wa"
+            href={chatUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <WhatsAppIcon /> Chat on WhatsApp
+          </a>
 
-          <ul className="pdp-features">
-            {product.features.map((f) => (
-              <li key={f}>{f}</li>
-            ))}
+          <div className="pdp-perks">
+            <div>
+              <TruckIcon />
+              <strong>Bangalore delivery</strong>
+              <span>Doorstep</span>
+            </div>
+            <div>
+              <CashIcon />
+              <strong>UPI or COD</strong>
+              <span>Pay your way</span>
+            </div>
+            <div>
+              <GiftIcon />
+              <strong>Gift-ready</strong>
+              <span>Festive packing</span>
+            </div>
+          </div>
+
+          <ul className="pdp-trust">
+            <li>
+              <CheckIcon /> 100% handcrafted in India
+            </li>
+            <li>
+              <CheckIcon /> Reusable — keeps its colours year after year
+            </li>
+            <li>
+              <CheckIcon /> Securely packed in protective festive packaging
+            </li>
+            <li>
+              <CheckIcon /> Custom lengths available for any door
+            </li>
           </ul>
 
           <details className="pdp-accordion" open>
             <summary>Product details</summary>
             <p>{product.details}</p>
+          </details>
+          <details className="pdp-accordion" open>
+            <summary>Highlights</summary>
+            <ul className="pdp-features">
+              {product.features.map((f) => (
+                <li key={f}>{f}</li>
+              ))}
+            </ul>
           </details>
           <details className="pdp-accordion">
             <summary>Delivery &amp; payment</summary>
@@ -147,6 +229,16 @@ export function ProductPage({ onAdded }: Props) {
         </div>
       </section>
 
+      {zoomIndex !== null && (
+        <Lightbox
+          images={product.images}
+          alt={product.name}
+          startIndex={zoomIndex}
+          onClose={() => setZoomIndex(null)}
+        />
+      )}
+
+      {product.reviews.length > 0 && (
       <section className="reviews" id="reviews">
         <div className="reviews-head">
           <h2>Customer reviews</h2>
@@ -188,6 +280,7 @@ export function ProductPage({ onAdded }: Props) {
           ))}
         </ul>
       </section>
+      )}
 
       <section className="related">
         <h2>You may also like</h2>

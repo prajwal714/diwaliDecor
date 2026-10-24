@@ -16,7 +16,7 @@ export function ProductGrid({ onAdded }: Props) {
     <section className="catalog" id="shop">
       <div className="section-head">
         <h2>Shop the collection</h2>
-        <p>Torans, wall hangings &amp; door pieces — made for festive Bangalore homes.</p>
+        <p>Handcrafted torans for your main door — made for festive Bangalore homes.</p>
       </div>
 
       <div className="catalog-toolbar">

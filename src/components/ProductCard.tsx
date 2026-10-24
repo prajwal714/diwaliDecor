@@ -23,9 +23,8 @@ export function ProductCard({ product, onAdded, index = 0 }: Props) {
             src={product.image}
             alt={product.name}
             loading="lazy"
-            width={1000}
-            height={1000}
           />
+          {product.badge && <span className="badge badge-card">{product.badge}</span>}
         </div>
         <div className="product-body">
           <h3>{product.name}</h3>
