@@ -1,0 +1,22 @@
+---
+description: Devamkart codebase map — read before broad repo search
+alwaysApply: true
+---
+
+# Devamkart quick map
+
+Full index: [AGENTS.md](../../AGENTS.md). Static React/Vite shop on Vercel; **no backend**.
+
+**Routes:** `/` (`HomePage`), `/product/:id` (`ProductPage`, id like `toran-10001`), `/checkout`.
+
+**Data:** Edit products in `src/data/products.seed.ts`; images in `public/products/<imageKey>/` (`*-close.jpg` = main). Runtime list in `src/data/products.ts` + `virtual:product-images` (see `vite.config.ts`).
+
+**State:** Cart `src/context/CartContext.tsx` → `localStorage` `devamkart-cart`. Checkout address `devamkart-address` in `CheckoutPage.tsx`.
+
+**Orders:** `src/utils/whatsapp.ts` + `src/config.ts` (WhatsApp/UPI). No server-side orders.
+
+**UI entry:** `src/App.tsx`. **All CSS:** `src/index.css`. **Images:** `OptimizedImage.tsx` + `imageVariants.ts`; build `scripts/optimize-images.mjs`.
+
+**Avoid exploring:** generated `public/**/*.webp`, `dist/`, lockfile unless deps change.
+
+When adding features, open only the files listed in AGENTS.md for that task.

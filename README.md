@@ -2,6 +2,8 @@
 
 Static Diwali decor storefront shipping across India. Browse items, add to cart, checkout with COD or UPI QR, then send the order via WhatsApp.
 
+**For AI / contributors:** see [AGENTS.md](AGENTS.md) for a concise codebase index (routes, data flow, file map).
+
 ## Setup
 
 ```bash
