@@ -2666,3 +2666,22 @@ h3 {
     display: none;
   }
 }
+
+/* Struck-through MRP + savings tag */
+.mrp {
+  margin-left: 0.5rem;
+  font-weight: 400;
+  font-size: 0.85em;
+  color: #8a8a8a;
+}
+
+.save-tag {
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 6px;
+  background: #e7f5ec;
+  color: #15803d;
+  font-size: 0.75em;
+  font-weight: 600;
+  white-space: nowrap;
+}

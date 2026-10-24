@@ -127,7 +127,17 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
               </span>
             </div>
           )}
-          <p className="pdp-price">{formatINR(product.price)}</p>
+          <p className="pdp-price">
+            {formatINR(product.price)}
+            {product.mrp && product.mrp > product.price && (
+              <>
+                <s className="mrp">{formatINR(product.mrp)}</s>
+                <span className="save-tag">
+                  {Math.round((1 - product.price / product.mrp) * 100)}% off
+                </span>
+              </>
+            )}
+          </p>
           <p className="pdp-size-note">
             Standard size 40 inches. Need a different length? Custom sizes are
             ₹50 per inch —{' '}
