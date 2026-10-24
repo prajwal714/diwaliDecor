@@ -1,0 +1,13 @@
+# Devamkart
+
+> Devamkart sells handcrafted festive torans, wall hangings and door decor for Diwali and other occasions. Delivery across India. Orders are confirmed and paid via WhatsApp / UPI.
+
+## Pages
+- [Home & catalogue](https://www.devamkart.com/): all products
+- [Toran 10001](https://www.devamkart.com/product/toran-10001)
+- [Toran 10002](https://www.devamkart.com/product/toran-10002)
+- [Toran 10003](https://www.devamkart.com/product/toran-10003)
+
+## Contact
+- WhatsApp: https://wa.me/917838363629
+- Payment: UPI (7087777812@upi)

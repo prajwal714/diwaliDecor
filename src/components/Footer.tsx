@@ -1,12 +1,28 @@
+import { QRCodeSVG } from 'qrcode.react'
 import { shopConfig } from '../config'
 
 export function Footer() {
   return (
     <footer className="footer">
+      <img
+        className="footer-logo"
+        src="/logo.png"
+        alt={shopConfig.brandName}
+        width={640}
+        height={314}
+      />
       <p>
         <strong>{shopConfig.brandName}</strong> — {shopConfig.tagline}
       </p>
       <p className="muted">{shopConfig.deliveryNote}</p>
+      <div style={{ margin: '16px auto', background: '#fff', padding: 8, width: 'fit-content', borderRadius: 8 }}>
+        <QRCodeSVG
+          value={shopConfig.siteUrl}
+          size={112}
+          imageSettings={{ src: '/favicon.png', height: 24, width: 24, excavate: true }}
+        />
+      </div>
+      <p className="muted">Scan to open {shopConfig.siteUrl.replace('https://', '')}</p>
     </footer>
   )
 }
