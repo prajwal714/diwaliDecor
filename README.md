@@ -1,4 +1,4 @@
-# Aarambh Decor
+# Devamkart
 
 Static Diwali decor storefront for Bangalore. Browse items, add to cart, checkout with COD or UPI QR, then send the order via WhatsApp.
 

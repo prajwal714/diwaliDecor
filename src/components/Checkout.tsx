@@ -1,10 +1,16 @@
 import { useEffect, useState, type FormEvent } from 'react'
+import { QRCodeSVG } from 'qrcode.react'
 import { shopConfig } from '../config'
 import { useCart } from '../context/CartContext'
 import {
+  buildOrderMessage,
+  buildUpiUri,
   formatINR,
+  isUpiConfigured,
+  orderUrl,
   isValidIndianMobile,
   openWhatsAppOrder,
+  type OrderDetails,
   type PaymentMethod,
 } from '../utils/whatsapp'
 
@@ -21,6 +27,7 @@ export function Checkout({ open, onClose }: Props) {
   const [payment, setPayment] = useState<PaymentMethod>('UPI')
   const [error, setError] = useState('')
   const [sent, setSent] = useState(false)
+  const [lastOrder, setLastOrder] = useState<OrderDetails | null>(null)
 
   useEffect(() => {
     if (!open) return
@@ -52,16 +59,17 @@ export function Checkout({ open, onClose }: Props) {
       return
     }
 
-    openWhatsAppOrder({
+    const order: OrderDetails = {
       name: name.trim(),
       mobile: mobile.trim(),
       area: area.trim(),
       payment,
       items,
       subtotal,
-    })
+    }
+    setLastOrder(order)
+    openWhatsAppOrder(order)
     setSent(true)
-    clear()
   }
 
   return (
@@ -96,15 +104,27 @@ export function Checkout({ open, onClose }: Props) {
               Opening WhatsApp with your order. If it didn’t open, check your
               popup blocker.
             </p>
+            {lastOrder && (
+              <a
+                className="btn btn-block"
+                href={orderUrl(buildOrderMessage(lastOrder))}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Reopen WhatsApp
+              </a>
+            )}
             <button
               type="button"
               className="btn btn-cart"
               onClick={() => {
+                clear()
+                setLastOrder(null)
                 setSent(false)
                 onClose()
               }}
             >
-              Done
+              I've sent the order
             </button>
           </div>
         ) : (
@@ -167,16 +187,27 @@ export function Checkout({ open, onClose }: Props) {
             {payment === 'UPI' && (
               <div className="upi-box">
                 <p>Pay via UPI, then send the order on WhatsApp so we can confirm.</p>
-                <img
-                  src={shopConfig.upiQrPath}
-                  alt="UPI QR code"
-                  className="upi-qr"
-                  width={200}
-                  height={200}
-                />
-                <p className="upi-id">
-                  UPI ID: <strong>{shopConfig.upiId}</strong>
-                </p>
+                {isUpiConfigured() ? (
+                  <>
+                    <div className="upi-qr">
+                      <QRCodeSVG value={buildUpiUri(subtotal)} size={200} />
+                    </div>
+                    <a className="btn btn-block" href={buildUpiUri(subtotal)}>
+                      Pay {formatINR(subtotal)} with UPI app
+                    </a>
+                    <p className="upi-id">
+                      UPI ID: <strong>{shopConfig.upiId}</strong>
+                    </p>
+                  </>
+                ) : (
+                  <img
+                    src={shopConfig.upiQrPath}
+                    alt="UPI QR code"
+                    className="upi-qr"
+                    width={200}
+                    height={200}
+                  />
+                )}
               </div>
             )}
 

@@ -1,9 +1,7 @@
-import { shopConfig } from '../config'
+import { chatUrl } from '../utils/whatsapp'
 
 export function WhatsAppFloat() {
-  const href = `https://wa.me/${shopConfig.whatsappNumber}?text=${encodeURIComponent(
-    `Hi ${shopConfig.brandName}! I'd like to ask about your Diwali decor.`,
-  )}`
+  const href = chatUrl()
 
   return (
     <a

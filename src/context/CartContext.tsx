@@ -23,7 +23,7 @@ type CartAction =
   | { type: 'CLEAR' }
   | { type: 'HYDRATE'; items: CartItem[] }
 
-const STORAGE_KEY = 'aarambh-cart'
+const STORAGE_KEY = 'devamkart-cart'
 
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {

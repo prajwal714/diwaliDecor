@@ -31,14 +31,38 @@ export function buildOrderMessage(order: OrderDetails): string {
     ),
     '',
     `Total: ${formatINR(order.subtotal)}`,
+    ...(order.payment === 'UPI'
+      ? ['', 'I have paid via UPI. Sending the payment screenshot / transaction ID next.']
+      : []),
   ]
   return lines.join('\n')
 }
 
+export function orderUrl(text: string) {
+  return `https://wa.me/${shopConfig.whatsappNumber}?text=${encodeURIComponent(text)}`
+}
+
+export function chatUrl() {
+  return shopConfig.whatsappBusinessLink
+}
+
 export function openWhatsAppOrder(order: OrderDetails) {
-  const text = encodeURIComponent(buildOrderMessage(order))
-  const url = `https://wa.me/${shopConfig.whatsappNumber}?text=${text}`
-  window.open(url, '_blank', 'noopener,noreferrer')
+  window.open(orderUrl(buildOrderMessage(order)), '_blank', 'noopener,noreferrer')
+}
+
+export function isUpiConfigured() {
+  return shopConfig.upiId !== 'TODO' && shopConfig.upiId.includes('@')
+}
+
+export function buildUpiUri(amount: number) {
+  const params = new URLSearchParams({
+    pa: shopConfig.upiId,
+    pn: shopConfig.upiName,
+    am: amount.toFixed(2),
+    cu: 'INR',
+    tn: `${shopConfig.brandName} order`,
+  })
+  return `upi://pay?${params.toString()}`
 }
 
 export function isValidIndianMobile(mobile: string) {
