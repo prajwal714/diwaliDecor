@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { OptimizedImage } from './OptimizedImage'
 
 type Props = {
   onShop: () => void
@@ -34,6 +35,8 @@ const slides: Slide[] = [
   },
 ]
 
+const BANNER_WIDTH = 1916
+const BANNER_HEIGHT = 821
 const INTERVAL_MS = 6500
 
 export function Hero({ onShop }: Props) {
@@ -64,18 +67,24 @@ export function Hero({ onShop }: Props) {
           className={i === active ? 'banner-slide active' : 'banner-slide'}
           aria-hidden={i !== active}
         >
-          <img
-            className="banner-img"
-            src={slide.image}
-            alt=""
-            fetchPriority={i === 0 ? 'high' : undefined}
-          />
+          {i === active && (
+            <OptimizedImage
+              className="banner-img"
+              src={slide.image}
+              alt=""
+              sizes="100vw"
+              variant="banner"
+              width={BANNER_WIDTH}
+              height={BANNER_HEIGHT}
+              priority={i === 0}
+            />
+          )}
           <div
             className={
               slide.copyClass ? `banner-copy ${slide.copyClass}` : 'banner-copy'
             }
           >
-            <img className="banner-mark" src="/favicon.png" alt="" />
+            <img className="banner-mark" src="/favicon.png" alt="" width={48} height={48} />
             <p className="banner-eyebrow">{slide.eyebrow}</p>
             <h1 className="banner-title">{slide.title}</h1>
             <p className="banner-text">{slide.text}</p>

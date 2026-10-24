@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { shopConfig } from '../config'
 import { useCart } from '../context/CartContext'
+import { OptimizedImage } from './OptimizedImage'
 
 type Props = {
   onOpenCart: () => void
@@ -26,7 +27,14 @@ export function Header({ onOpenCart }: Props) {
       </div>
       <header className="header">
         <Link to="/" className="brand">
-          <img src="/logo.png" alt={shopConfig.brandName} width={640} height={314} />
+          <OptimizedImage
+            src="/logo.png"
+            alt={shopConfig.brandName}
+            sizes="(max-width: 760px) 140px, 200px"
+            variant="logo"
+            width={640}
+            height={314}
+          />
         </Link>
         <nav className="header-nav">
           <button type="button" className="nav-link" onClick={goShop}>
