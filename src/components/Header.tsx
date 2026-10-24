@@ -22,7 +22,7 @@ export function Header({ onOpenCart }: Props) {
   return (
     <div className="top-chrome">
       <div className="announce">
-        Festive decor for Bangalore homes · UPI or cash on delivery
+        Festive decor for homes across India · UPI or cash on delivery
       </div>
       <header className="header">
         <Link to="/" className="brand">

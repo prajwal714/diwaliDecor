@@ -10,8 +10,10 @@ import { chatUrl, formatINR } from '../utils/whatsapp'
 import { Stars } from './Stars'
 import { ProductCard } from './ProductCard'
 import { Lightbox } from './Lightbox'
+import { UpiQrModal } from './UpiQrModal'
 import {
   BagIcon,
+  QrIcon,
   CashIcon,
   CheckIcon,
   GiftIcon,
@@ -30,6 +32,7 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
   const { id } = useParams<{ id: string }>()
   const product = id ? getProduct(id) : undefined
   const { add } = useCart()
+  const [qrOpen, setQrOpen] = useState(false)
   const [zoomIndex, setZoomIndex] = useState<number | null>(null)
   const [qty, setQty] = useState(1)
 
@@ -130,7 +133,7 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
           <p className="pdp-delivery">
             <TruckIcon size={22} />
             <span>
-              Delivery across <strong>Bangalore</strong> · Confirm on WhatsApp
+              Delivery across <strong>India</strong> · Confirm on WhatsApp
             </span>
           </p>
 
@@ -165,6 +168,13 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
           <button type="button" className="btn pdp-buy-now" onClick={handleBuyNow}>
             Buy it now
           </button>
+          <button
+            type="button"
+            className="btn pdp-buy-now qr-trigger"
+            onClick={() => setQrOpen(true)}
+          >
+            <QrIcon size={20} /> Pay by UPI QR
+          </button>
           <a
             className="btn pdp-wa"
             href={chatUrl()}
@@ -177,7 +187,7 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
           <div className="pdp-perks">
             <div>
               <TruckIcon />
-              <strong>Bangalore delivery</strong>
+              <strong>Pan-India delivery</strong>
               <span>Doorstep</span>
             </div>
             <div>
@@ -222,12 +232,18 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
           <details className="pdp-accordion">
             <summary>Delivery &amp; payment</summary>
             <p>
-              Delivery across Bangalore. Pay by UPI QR at checkout or cash on
+              Delivery across India. Pay by UPI QR at checkout or cash on
               delivery. Orders are confirmed on WhatsApp.
             </p>
           </details>
         </div>
       </section>
+
+      <UpiQrModal
+        open={qrOpen}
+        onClose={() => setQrOpen(false)}
+        amount={product.price * qty}
+      />
 
       {zoomIndex !== null && (
         <Lightbox

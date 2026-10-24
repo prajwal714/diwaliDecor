@@ -72,3 +72,59 @@ export const ZoomIcon = ({ size = 18 }: P) => (
     <path d="m20 20-4-4M11 8v6M8 11h6" />
   </svg>
 )
+
+export const LockIcon = ({ size = 18 }: P) => (
+  <svg {...base(size)}>
+    <rect x="5" y="11" width="14" height="10" rx="2" />
+    <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+  </svg>
+)
+
+export const QrIcon = ({ size = 24 }: P) => (
+  <svg {...base(size)}>
+    <rect x="3" y="3" width="7" height="7" rx="1" />
+    <rect x="14" y="3" width="7" height="7" rx="1" />
+    <rect x="3" y="14" width="7" height="7" rx="1" />
+    <path d="M14 14h3v3h-3zM20 14v.01M14 20h3M20 17v4" />
+  </svg>
+)
+
+export const CardIcon = ({ size = 24 }: P) => (
+  <svg {...base(size)}>
+    <rect x="2" y="5" width="20" height="14" rx="2" />
+    <path d="M2 10h20M6 15h4" />
+  </svg>
+)
+
+export const PinIcon = ({ size = 24 }: P) => (
+  <svg {...base(size)}>
+    <path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.800 12 21 12 21z" />
+    <circle cx="12" cy="9.5" r="2.5" />
+  </svg>
+)
+
+export const ArrowLeftIcon = ({ size = 18 }: P) => (
+  <svg {...base(size)}>
+    <path d="M15 5l-7 7 7 7" />
+  </svg>
+)
+
+/** Peacock feather line art for page edges (decorative) */
+export const FeatherIcon = ({ size = 160 }: P) => (
+  <svg
+    width={size}
+    height={size * 2}
+    viewBox="0 0 80 160"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1"
+    strokeLinecap="round"
+    aria-hidden="true"
+  >
+    <path d="M40 158C40 120 38 90 40 52" strokeWidth="1.4" />
+    <ellipse cx="40" cy="38" rx="9" ry="14" />
+    <ellipse cx="40" cy="38" rx="4.500" ry="8" />
+    <path d="M40 24C18 28 6 52 14 84 22 112 36 124 40 136M40 24c22 4 34 28 26 60-8 28-22 40-26 52" />
+    <path d="M40 60C28 64 20 76 22 92M40 60c12 4 20 16 18 32M40 84C32 88 28 98 30 108M40 84c8 4 12 14 10 24" />
+  </svg>
+)

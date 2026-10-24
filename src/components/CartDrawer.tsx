@@ -1,6 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useCart } from '../context/CartContext'
 import { formatINR } from '../utils/whatsapp'
+import { UpiQrModal } from './UpiQrModal'
+import { QrIcon } from './Icons'
 
 type Props = {
   open: boolean
@@ -10,6 +12,7 @@ type Props = {
 
 export function CartDrawer({ open, onClose, onCheckout }: Props) {
   const { items, subtotal, setQty, remove } = useCart()
+  const [qrOpen, setQrOpen] = useState(false)
 
   useEffect(() => {
     if (!open) return
@@ -93,11 +96,19 @@ export function CartDrawer({ open, onClose, onCheckout }: Props) {
               >
                 Place Order {formatINR(subtotal)}
               </button>
+              <button
+                type="button"
+                className="btn btn-secondary btn-block qr-trigger"
+                onClick={() => setQrOpen(true)}
+              >
+                <QrIcon size={20} /> Pay by UPI QR
+              </button>
               <p className="secure-note">Pay later by UPI QR or cash on delivery</p>
             </div>
           </>
         )}
       </aside>
+      <UpiQrModal open={qrOpen} onClose={() => setQrOpen(false)} amount={subtotal} />
     </div>
   )
 }

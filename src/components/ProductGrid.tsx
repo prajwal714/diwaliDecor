@@ -1,3 +1,4 @@
+import { FeatherIcon } from './Icons'
 import { useState } from 'react'
 import { categories, products, type Category } from '../data/products'
 import { ProductCard } from './ProductCard'
@@ -14,9 +15,11 @@ export function ProductGrid({ onAdded }: Props) {
 
   return (
     <section className="catalog" id="shop">
+      <span className="feather feather-left"><FeatherIcon size={70} /></span>
+      <span className="feather feather-right"><FeatherIcon size={70} /></span>
       <div className="section-head">
         <h2>Shop the collection</h2>
-        <p>Handcrafted torans for your main door — made for festive Bangalore homes.</p>
+        <p>Handcrafted torans for your main door — made for festive homes across India.</p>
       </div>
 
       <div className="catalog-toolbar">

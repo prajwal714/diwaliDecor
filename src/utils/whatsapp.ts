@@ -6,7 +6,12 @@ export type PaymentMethod = 'COD' | 'UPI'
 export type OrderDetails = {
   name: string
   mobile: string
-  area: string
+  email?: string
+  address1: string
+  address2?: string
+  city: string
+  state: string
+  pin: string
   payment: PaymentMethod
   items: CartItem[]
   subtotal: number
@@ -21,7 +26,9 @@ export function buildOrderMessage(order: OrderDetails): string {
     `New order — ${shopConfig.brandName}`,
     `Name: ${order.name}`,
     `Mobile: ${order.mobile}`,
-    `Area: ${order.area}`,
+    ...(order.email ? [`Email: ${order.email}`] : []),
+    `Address: ${[order.address1, order.address2].filter(Boolean).join(', ')}`,
+    `City: ${order.city}, ${order.state} - ${order.pin}`,
     `Payment: ${order.payment === 'UPI' ? 'UPI' : 'Cash on delivery'}`,
     '',
     'Items:',
@@ -63,6 +70,10 @@ export function buildUpiUri(amount: number) {
     tn: `${shopConfig.brandName} order`,
   })
   return `upi://pay?${params.toString()}`
+}
+
+export function isValidPin(pin: string) {
+  return /^[1-9]\d{5}$/.test(pin.trim())
 }
 
 export function isValidIndianMobile(mobile: string) {

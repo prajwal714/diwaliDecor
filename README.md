@@ -1,6 +1,6 @@
 # Devamkart
 
-Static Diwali decor storefront for Bangalore. Browse items, add to cart, checkout with COD or UPI QR, then send the order via WhatsApp.
+Static Diwali decor storefront shipping across India. Browse items, add to cart, checkout with COD or UPI QR, then send the order via WhatsApp.
 
 ## Setup
 

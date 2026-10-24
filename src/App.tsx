@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
 import { Header } from './components/Header'
 import { HomePage } from './components/HomePage'
 import { ProductPage } from './components/ProductPage'
 import { CartDrawer } from './components/CartDrawer'
-import { Checkout } from './components/Checkout'
+import { CheckoutPage } from './components/CheckoutPage'
 import { Footer } from './components/Footer'
 import { WhatsAppFloat } from './components/WhatsAppFloat'
 
@@ -25,13 +31,15 @@ function HashScroll() {
 
 function AppShell() {
   const [cartOpen, setCartOpen] = useState(false)
-  const [checkoutOpen, setCheckoutOpen] = useState(false)
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+  const isCheckout = pathname === '/checkout'
   const openCart = () => setCartOpen(true)
 
   return (
     <>
       <HashScroll />
-      <Header onOpenCart={openCart} />
+      {!isCheckout && <Header onOpenCart={openCart} />}
       <main>
         <Routes>
           <Route
@@ -43,23 +51,23 @@ function AppShell() {
             element={
               <ProductPage
                 onAdded={openCart}
-                onBuyNow={() => setCheckoutOpen(true)}
+                onBuyNow={() => navigate('/checkout')}
               />
             }
           />
+          <Route path="/checkout" element={<CheckoutPage />} />
         </Routes>
       </main>
-      <Footer />
-      <WhatsAppFloat />
+      {!isCheckout && <Footer />}
+      {!isCheckout && <WhatsAppFloat />}
       <CartDrawer
         open={cartOpen}
         onClose={() => setCartOpen(false)}
         onCheckout={() => {
           setCartOpen(false)
-          setCheckoutOpen(true)
+          navigate('/checkout')
         }}
       />
-      <Checkout open={checkoutOpen} onClose={() => setCheckoutOpen(false)} />
     </>
   )
 }
