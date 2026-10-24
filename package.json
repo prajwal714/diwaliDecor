@@ -13,6 +13,7 @@
     "preview": "bash scripts/with-node.sh ./node_modules/vite/bin/vite.js preview"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "qrcode.react": "^4.2.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

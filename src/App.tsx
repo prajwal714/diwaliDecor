@@ -6,6 +6,7 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import { CartProvider } from './context/CartContext'
 import { Header } from './components/Header'
 import { HomePage } from './components/HomePage'
@@ -77,6 +78,7 @@ export default function App() {
     <BrowserRouter>
       <CartProvider>
         <AppShell />
+        <Analytics />
       </CartProvider>
     </BrowserRouter>
   )
