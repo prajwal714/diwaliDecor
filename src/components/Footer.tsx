@@ -1,15 +1,19 @@
 import { QRCodeSVG } from 'qrcode.react'
 import { shopConfig } from '../config'
+import { OptimizedImage } from './OptimizedImage'
 
 export function Footer() {
   return (
     <footer className="footer">
-      <img
+      <OptimizedImage
         className="footer-logo"
         src="/logo.png"
         alt={shopConfig.brandName}
+        sizes="200px"
+        variant="logo"
         width={640}
         height={314}
+        loading="lazy"
       />
       <p>
         <strong>{shopConfig.brandName}</strong> — {shopConfig.tagline}

@@ -2,6 +2,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import type { Product } from '../data/products'
 import { useCart } from '../context/CartContext'
 import { formatINR } from '../utils/whatsapp'
+import { OptimizedImage } from './OptimizedImage'
+
+const THUMB_WIDTH = 1200
+const THUMB_HEIGHT = 799
 
 type Props = {
   product: Product
@@ -20,9 +24,13 @@ export function ProductCard({ product, onAdded, index = 0 }: Props) {
     >
       <Link to={`/product/${product.id}`} className="product-link">
         <div className="product-image-wrap">
-          <img
+          <OptimizedImage
             src={product.image}
             alt={product.name}
+            sizes="(max-width: 520px) 50vw, 33vw"
+            variant="productThumb"
+            width={THUMB_WIDTH}
+            height={THUMB_HEIGHT}
             loading="lazy"
           />
           {product.badge && <span className="badge badge-card">{product.badge}</span>}

@@ -326,6 +326,11 @@ textarea {
   border-radius: var(--radius);
 }
 
+.product-image-wrap picture {
+  display: block;
+  width: 100%;
+}
+
 .product-image-wrap img {
   display: block;
   width: 100%;
@@ -1531,6 +1536,12 @@ textarea {
   visibility: visible;
 }
 
+.banner-slide > picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
 .banner-img {
   position: absolute;
   inset: 0;
@@ -1572,7 +1583,7 @@ textarea {
   font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: #6b4e1a;
 }
 
 .banner-title {
@@ -1634,16 +1645,28 @@ textarea {
 }
 
 .dot {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot::after {
+  content: '';
   width: 11px;
   height: 11px;
-  padding: 0;
   border: 2px solid var(--blue);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.7);
-  cursor: pointer;
 }
 
-.dot.active {
+.dot.active::after {
   background: var(--blue);
 }
 
@@ -1812,12 +1835,8 @@ h3 {
   border-width: 1px;
 }
 
-.dot {
+.dot::after {
   border-color: var(--blue);
-}
-
-.dot.active {
-  background: var(--blue);
 }
 
 /* Product cards: white surface, gold hairline, soft hover lift */

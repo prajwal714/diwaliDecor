@@ -10,6 +10,7 @@ import { useCart } from '../context/CartContext'
 import { chatUrl, formatINR } from '../utils/whatsapp'
 import { Stars } from './Stars'
 import { ProductCard } from './ProductCard'
+import { OptimizedImage } from './OptimizedImage'
 import { Lightbox } from './Lightbox'
 import { UpiQrModal } from './UpiQrModal'
 import {
@@ -107,7 +108,16 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
               onClick={() => setZoomIndex(i)}
               aria-label={`Zoom image ${i + 1}`}
             >
-              <img src={src} alt={`${product.name} — view ${i + 1}`} />
+              <OptimizedImage
+                src={src}
+                alt={`${product.name} — view ${i + 1}`}
+                sizes={i === 0 ? '(max-width: 760px) 100vw, 50vw' : '120px'}
+                variant={/-close\.jpe?g$/i.test(src) ? 'productThumb' : undefined}
+                width={1200}
+                height={799}
+                loading={i === 0 ? 'eager' : 'lazy'}
+                priority={i === 0}
+              />
               <span className="pdp-zoom-hint">
                 <ZoomIcon /> Zoom
               </span>

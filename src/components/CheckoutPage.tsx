@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
 import { shopConfig } from '../config'
+import { OptimizedImage } from './OptimizedImage'
 import { useCart } from '../context/CartContext'
 import {
   ArrowLeftIcon,
@@ -230,7 +231,14 @@ export function CheckoutPage() {
 
       <header className="co-header">
         <Link to="/" className="brand">
-          <img src="/logo.png" alt={shopConfig.brandName} width={640} height={314} />
+          <OptimizedImage
+            src="/logo.png"
+            alt={shopConfig.brandName}
+            sizes="(max-width: 760px) 140px, 200px"
+            variant="logo"
+            width={640}
+            height={314}
+          />
         </Link>
         {!lastOrder && (
           <ol className="stepper" aria-label="Checkout progress">

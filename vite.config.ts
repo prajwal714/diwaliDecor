@@ -8,6 +8,8 @@ import { shopConfig } from './src/config.ts'
 const VIRTUAL_ID = 'virtual:product-images'
 const RESOLVED_ID = '\0' + VIRTUAL_ID
 const IMAGE_EXT = /\.(jpe?g|png|webp|avif)$/i
+/** Responsive variants from scripts/optimize-images.mjs — not gallery images. */
+const isOptimizedVariant = (file: string) => /-\d+\.webp$/i.test(file)
 
 /**
  * Scans public/products/<id>/ and exposes { [id]: string[] } of image URLs.
@@ -29,7 +31,10 @@ function scanImages(): Record<string, string[]> {
     if (!fs.statSync(sub).isDirectory()) continue
     out[id] = fs
       .readdirSync(sub)
-      .filter((f) => IMAGE_EXT.test(f) && !f.includes('-original'))
+      .filter(
+        (f) =>
+          IMAGE_EXT.test(f) && !f.includes('-original') && !isOptimizedVariant(f),
+      )
       .sort((a, b) => rank(id, a) - rank(id, b) || a.localeCompare(b))
       .map((f) => `/products/${id}/${f}`)
   }
@@ -54,7 +59,10 @@ function productImages(): Plugin {
       if (!fs.statSync(sub).isDirectory()) continue
       out[id] = fs
         .readdirSync(sub)
-        .filter((f) => IMAGE_EXT.test(f) && !f.includes('-original'))
+        .filter(
+        (f) =>
+          IMAGE_EXT.test(f) && !f.includes('-original') && !isOptimizedVariant(f),
+      )
         .sort((a, b) => rank(id, a) - rank(id, b) || a.localeCompare(b))
         .map((f) => `/products/${id}/${f}`)
     }
