@@ -2666,3 +2666,49 @@ h3 {
     display: none;
   }
 }
+
+/* Struck-through MRP + savings tag */
+.mrp {
+  margin-left: 0.5rem;
+  font-weight: 400;
+  font-size: 0.85em;
+  color: #8a8a8a;
+}
+
+.save-tag {
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 6px;
+  background: #e7f5ec;
+  color: #15803d;
+  font-size: 0.75em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Narrow phones: 2-column grid cards are too tight for side-by-side buttons */
+@media (max-width: 520px) {
+  .card-actions {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .card-actions .btn {
+    width: 100%;
+    padding: 0.65rem 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .product .price {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.15rem 0.4rem;
+  }
+
+  .product .price .mrp,
+  .product .price .save-tag {
+    margin-left: 0;
+  }
+}

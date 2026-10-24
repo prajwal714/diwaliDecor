@@ -29,7 +29,17 @@ export function ProductCard({ product, onAdded, index = 0 }: Props) {
         </div>
         <div className="product-body">
           <h3>{product.name}</h3>
-          <p className="price">{formatINR(product.price)}</p>
+          <p className="price">
+            {formatINR(product.price)}
+            {product.mrp && product.mrp > product.price && (
+              <>
+                <s className="mrp">{formatINR(product.mrp)}</s>
+                <span className="save-tag">
+                  {Math.round((1 - product.price / product.mrp) * 100)}% off
+                </span>
+              </>
+            )}
+          </p>
           <p className="product-desc">{product.description}</p>
         </div>
       </Link>

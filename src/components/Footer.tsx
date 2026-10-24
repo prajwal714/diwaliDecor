@@ -17,9 +17,11 @@ export function Footer() {
       <p className="muted">{shopConfig.deliveryNote}</p>
       <div style={{ margin: '16px auto', background: '#fff', padding: 8, width: 'fit-content', borderRadius: 8 }}>
         <QRCodeSVG
-          value={shopConfig.siteUrl}
-          size={112}
-          imageSettings={{ src: '/favicon.png', height: 24, width: 24, excavate: true }}
+          value={`${shopConfig.siteUrl}/`}
+          size={160}
+          level="H"
+          marginSize={2}
+          imageSettings={{ src: '/favicon.png', height: 28, width: 28, excavate: true }}
         />
       </div>
       <p className="muted">Scan to open {shopConfig.siteUrl.replace('https://', '')}</p>
