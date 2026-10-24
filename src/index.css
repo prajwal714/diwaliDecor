@@ -2694,7 +2694,9 @@ h3 {
   }
 
   .card-actions .btn {
+    flex: 0 0 auto;
     width: 100%;
+    min-height: 44px;
     padding: 0.65rem 0.5rem;
     font-size: 0.95rem;
   }
