@@ -1027,19 +1027,41 @@ textarea {
 
 @media (max-width: 560px) {
   .header {
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 0.6rem;
   }
 
   .catalog {
     padding-inline: 0.25rem;
+    padding-bottom: 5rem;
   }
 
   .product-page {
     padding-inline: 0.35rem;
+    padding-bottom: 5rem;
   }
 
-  .header {
-    padding-inline: 0.6rem;
+  .announce {
+    letter-spacing: 0.02em;
+    font-size: 0.7rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .nav-link {
+    font-size: 1rem;
+    padding: 0.4rem 0.55rem;
+  }
+
+  .co-sum-items li {
+    grid-template-columns: 64px 1fr auto;
+    gap: 0.55rem;
+  }
+
+  .co-sum-items img {
+    width: 64px;
+  }
+
+  .stepper li {
+    width: 4.6rem;
   }
 }
 
@@ -2661,7 +2683,7 @@ h3 {
   color: #15803d;
 }
 
-@media (max-width: 380px) {
+@media (max-width: 340px) {
   .pdp-quick-btn span {
     display: none;
   }

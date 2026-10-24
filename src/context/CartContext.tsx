@@ -72,21 +72,21 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null)
 
-export function CartProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, { items: [] })
+function loadCart(): CartItem[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw) as CartItem[]
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
 
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (!raw) return
-      const parsed = JSON.parse(raw) as CartItem[]
-      if (Array.isArray(parsed)) {
-        dispatch({ type: 'HYDRATE', items: parsed })
-      }
-    } catch {
-      // ignore corrupt storage
-    }
-  }, [])
+export function CartProvider({ children }: { children: ReactNode }) {
+  const [state, dispatch] = useReducer(cartReducer, null, () => ({
+    items: loadCart(),
+  }))
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items))
