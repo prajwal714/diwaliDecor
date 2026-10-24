@@ -140,7 +140,7 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
           </p>
           <p className="pdp-size-note">
             Standard size 40 inches. Need a different length? Custom sizes are
-            ₹50 per inch —{' '}
+            ₹{product.details.match(/₹(\d+) per inch/)?.[1] ?? '50'} per inch —{' '}
             <a href={chatUrl()} target="_blank" rel="noopener noreferrer">
               message us on WhatsApp
             </a>

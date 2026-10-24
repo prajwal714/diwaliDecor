@@ -2685,3 +2685,30 @@ h3 {
   font-weight: 600;
   white-space: nowrap;
 }
+
+/* Narrow phones: 2-column grid cards are too tight for side-by-side buttons */
+@media (max-width: 520px) {
+  .card-actions {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .card-actions .btn {
+    width: 100%;
+    padding: 0.65rem 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .product .price {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.15rem 0.4rem;
+  }
+
+  .product .price .mrp,
+  .product .price .save-tag {
+    margin-left: 0;
+  }
+}
