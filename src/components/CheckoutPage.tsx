@@ -15,6 +15,7 @@ import {
   QrIcon,
   TruckIcon,
 } from './Icons'
+import { createOrder } from '../utils/orders'
 import {
   buildOrderMessage,
   buildUpiUri,
@@ -158,6 +159,7 @@ export function CheckoutPage() {
   const [saveAddr, setSaveAddr] = useState(Boolean(saved))
   const [payment, setPayment] = useState<PaymentMethod>('UPI')
   const [error, setError] = useState('')
+  const [saving, setSaving] = useState(false)
   const [lastOrder, setLastOrder] = useState<OrderDetails | null>(null)
 
   useEffect(() => {
@@ -200,7 +202,9 @@ export function CheckoutPage() {
     setStep('payment')
   }
 
-  function placeOrder() {
+  async function placeOrder() {
+    setError('')
+    setSaving(true)
     const order: OrderDetails = {
       name: addr.name.trim(),
       mobile: addr.mobile.trim(),
@@ -214,8 +218,16 @@ export function CheckoutPage() {
       items,
       subtotal,
     }
-    setLastOrder(order)
-    openWhatsAppOrder(order)
+    try {
+      const orderId = await createOrder(order)
+      const saved = { ...order, orderId }
+      setLastOrder(saved)
+      openWhatsAppOrder(saved)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not save your order. Please try again.')
+    } finally {
+      setSaving(false)
+    }
   }
 
   const stepIndex = STEPS.findIndex((s) => s.id === step)
@@ -269,7 +281,20 @@ export function CheckoutPage() {
             <CheckIcon size={44} />
           </span>
           <h1>Opening WhatsApp with your order</h1>
-          <p>If it didn’t open, check your popup blocker.</p>
+          {lastOrder.orderId && (
+            <p className="order-id-banner">
+              Order ID <strong>{lastOrder.orderId}</strong>
+            </p>
+          )}
+          <p>
+            Keep this id. Track it anytime with the mobile number used at checkout.
+            If WhatsApp didn’t open, check your popup blocker.
+          </p>
+          {lastOrder.orderId && (
+            <Link to="/track" className="btn btn-secondary btn-block">
+              Track this order
+            </Link>
+          )}
           <a
             className="btn btn-secondary btn-block"
             href={orderUrl(buildOrderMessage(lastOrder))}
@@ -528,12 +553,18 @@ export function CheckoutPage() {
                   </button>
                 </div>
 
+                {error && (
+                  <p className="form-error" role="alert">
+                    {error}
+                  </p>
+                )}
                 <button
                   type="button"
                   className="btn btn-cart btn-block co-cta"
                   onClick={placeOrder}
+                  disabled={saving}
                 >
-                  Send order on WhatsApp
+                  {saving ? 'Saving order…' : 'Send order on WhatsApp'}
                 </button>
               </>
             )}

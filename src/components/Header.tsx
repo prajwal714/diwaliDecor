@@ -40,6 +40,9 @@ export function Header({ onOpenCart }: Props) {
           <button type="button" className="nav-link" onClick={goShop}>
             Shop
           </button>
+          <Link to="/track" className="nav-link">
+            Track
+          </Link>
           <button
             type="button"
             className="cart-icon-btn"

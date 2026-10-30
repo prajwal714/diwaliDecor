@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
 import { shopConfig } from '../config'
 import { OptimizedImage } from './OptimizedImage'
@@ -19,6 +20,9 @@ export function Footer() {
         <strong>{shopConfig.brandName}</strong> — {shopConfig.tagline}
       </p>
       <p className="muted">{shopConfig.deliveryNote}</p>
+      <p>
+        <Link to="/track">Track your order</Link>
+      </p>
       <div style={{ margin: '16px auto', background: '#fff', padding: 8, width: 'fit-content', borderRadius: 8 }}>
         <QRCodeSVG
           value={`${shopConfig.siteUrl}/`}

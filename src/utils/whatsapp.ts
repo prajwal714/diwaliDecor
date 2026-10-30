@@ -15,6 +15,7 @@ export type OrderDetails = {
   payment: PaymentMethod
   items: CartItem[]
   subtotal: number
+  orderId?: string
 }
 
 export function formatINR(amount: number) {
@@ -24,6 +25,7 @@ export function formatINR(amount: number) {
 export function buildOrderMessage(order: OrderDetails): string {
   const lines = [
     `New order — ${shopConfig.brandName}`,
+    ...(order.orderId ? [`Order ID: ${order.orderId}`] : []),
     `Name: ${order.name}`,
     `Mobile: ${order.mobile}`,
     ...(order.email ? [`Email: ${order.email}`] : []),

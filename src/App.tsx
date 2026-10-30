@@ -13,6 +13,8 @@ import { HomePage } from './components/HomePage'
 import { ProductPage } from './components/ProductPage'
 import { CartDrawer } from './components/CartDrawer'
 import { CheckoutPage } from './components/CheckoutPage'
+import { TrackPage } from './components/TrackPage'
+import { AdminPage } from './components/AdminPage'
 import { Footer } from './components/Footer'
 import { WhatsAppFloat } from './components/WhatsAppFloat'
 
@@ -34,7 +36,7 @@ function AppShell() {
   const [cartOpen, setCartOpen] = useState(false)
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const isCheckout = pathname === '/checkout'
+  const isCheckout = pathname === '/checkout' || pathname === '/admin'
   const openCart = () => setCartOpen(true)
 
   return (
@@ -57,6 +59,8 @@ function AppShell() {
             }
           />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/track" element={<TrackPage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </main>
       {!isCheckout && <Footer />}
