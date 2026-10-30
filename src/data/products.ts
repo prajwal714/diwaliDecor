@@ -15,7 +15,7 @@ export function getProduct(id: string) {
   return products.find((p) => p.id === id)
 }
 
-export function getSimilarProducts(product: Product, limit = 3) {
+export function getSimilarProducts(product: Product, limit = 3, products: Product[] = allProducts) {
   const sameCategory = products.filter(
     (p) => p.category === product.category && p.id !== product.id,
   )
@@ -25,6 +25,8 @@ export function getSimilarProducts(product: Product, limit = 3) {
   )
   return [...sameCategory, ...rest].slice(0, limit)
 }
+
+const allProducts = products
 
 export function averageRating(reviews: Review[]) {
   if (reviews.length === 0) return 0

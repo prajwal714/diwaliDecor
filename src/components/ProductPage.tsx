@@ -1,10 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
-import {
-  averageRating,
-  getProduct,
-  getSimilarProducts,
-} from '../data/products'
+import { averageRating } from '../data/products'
+import { useProducts } from '../context/ProductsContext'
 import { shopConfig } from '../config'
 import { useCart } from '../context/CartContext'
 import { chatUrl, formatINR } from '../utils/whatsapp'
@@ -33,6 +30,7 @@ type Props = {
 
 export function ProductPage({ onAdded, onBuyNow }: Props) {
   const { id } = useParams<{ id: string }>()
+  const { getProduct, getSimilarProducts } = useProducts()
   const product = id ? getProduct(id) : undefined
   const { add } = useCart()
   const [qrOpen, setQrOpen] = useState(false)
@@ -64,7 +62,7 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
 
   const similar = useMemo(
     () => (product ? getSimilarProducts(product, 3) : []),
-    [product],
+    [product, getSimilarProducts],
   )
 
   if (!product) {
@@ -176,6 +174,7 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
             </span>
           </p>
 
+          {product.soldOut && <p className="sold-out-note">Sold out for now. Message us on WhatsApp to be notified.</p>}
           <div className="pdp-buy-row">
             <div className="qty-control">
               <button
@@ -198,13 +197,14 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
               type="button"
               className="btn btn-cart btn-swipe pdp-add"
               onClick={handleAdd}
+              disabled={product.soldOut}
             >
               <span className="btn-swipe-label">
                 <BagIcon /> Add to cart
               </span>
             </button>
           </div>
-          <button type="button" className="btn pdp-buy-now" onClick={handleBuyNow}>
+          <button type="button" className="btn pdp-buy-now" onClick={handleBuyNow} disabled={product.soldOut}>
             Buy it now
           </button>
           <div className="pdp-quick">

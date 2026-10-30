@@ -1,6 +1,7 @@
 import { FeatherIcon } from './Icons'
 import { useState } from 'react'
-import { categories, products, type Category } from '../data/products'
+import { categories, type Category } from '../data/products'
+import { useProducts } from '../context/ProductsContext'
 import { ProductCard } from './ProductCard'
 
 type Props = {
@@ -8,6 +9,7 @@ type Props = {
 }
 
 export function ProductGrid({ onAdded }: Props) {
+  const { products } = useProducts()
   const [filter, setFilter] = useState<Category | 'All'>('All')
 
   const visible =

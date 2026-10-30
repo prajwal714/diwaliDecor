@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink, Route, Routes } from 'react-router-dom'
+import { AdminProducts } from './AdminProducts'
 import type { Session } from '@supabase/supabase-js'
 import { shopConfig } from '../config'
 import { supabase } from '../lib/supabase'
@@ -21,16 +22,6 @@ export function AdminPage() {
   const [password, setPassword] = useState('')
   const [authError, setAuthError] = useState('')
   const [signingIn, setSigningIn] = useState(false)
-  const [orders, setOrders] = useState<StoredOrder[]>([])
-  const [loadError, setLoadError] = useState('')
-  const [filter, setFilter] = useState<OrderStatus | 'all'>('all')
-  const [selected, setSelected] = useState<string | null>(null)
-  const [status, setStatus] = useState<OrderStatus>('placed')
-  const [trackingUrl, setTrackingUrl] = useState('')
-  const [note, setNote] = useState('')
-  const [saveError, setSaveError] = useState('')
-  const [saving, setSaving] = useState(false)
-
   useEffect(() => {
     const meta = document.createElement('meta')
     meta.name = 'robots'
@@ -51,31 +42,6 @@ export function AdminPage() {
     return () => data.subscription.unsubscribe()
   }, [])
 
-  useEffect(() => {
-    if (!session) return
-    let cancelled = false
-    listOrders()
-      .then((rows) => {
-        if (!cancelled) setOrders(rows)
-      })
-      .catch((err: unknown) => {
-        if (!cancelled) {
-          setLoadError(err instanceof Error ? err.message : 'Could not load orders.')
-        }
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [session])
-
-  function openOrder(order: StoredOrder) {
-    setSelected(order.id)
-    setStatus(order.status)
-    setTrackingUrl(order.tracking_url ?? '')
-    setNote(order.tracking_note ?? '')
-    setSaveError('')
-  }
-
   async function signIn(e: FormEvent) {
     e.preventDefault()
     if (!supabase) return
@@ -88,45 +54,6 @@ export function AdminPage() {
     setSigningIn(false)
     if (error) setAuthError('Those details did not match. Try again.')
   }
-
-  async function save(e: FormEvent) {
-    e.preventDefault()
-    if (!selected) return
-    const url = trackingUrl.trim()
-    if (url && !/^https?:\/\//i.test(url)) {
-      setSaveError('Tracking link must start with http:// or https://')
-      return
-    }
-    setSaving(true)
-    setSaveError('')
-    try {
-      await updateOrderStatus(selected, {
-        status,
-        tracking_url: url,
-        tracking_note: note,
-      })
-      setOrders((rows) =>
-        rows.map((row) =>
-          row.id === selected
-            ? {
-                ...row,
-                status,
-                tracking_url: url || null,
-                tracking_note: note.trim() || null,
-                updated_at: new Date().toISOString(),
-              }
-            : row,
-        ),
-      )
-    } catch (err) {
-      setSaveError(err instanceof Error ? err.message : 'Could not update that order.')
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const visible = orders.filter((order) => filter === 'all' || order.status === filter)
-  const active = orders.find((order) => order.id === selected) ?? null
 
   return (
     <div className="checkout-page admin-page">
@@ -141,7 +68,7 @@ export function AdminPage() {
             height={314}
           />
         </Link>
-        <h1 className="admin-title">Orders</h1>
+        <h1 className="admin-title">Admin</h1>
         {session && supabase && (
           <button
             type="button"
@@ -196,7 +123,98 @@ export function AdminPage() {
       )}
 
       {session && (
-        <div className="admin-layout">
+        <>
+          <nav className="admin-tabs">
+            <NavLink to="/admin" end>Orders</NavLink>
+            <NavLink to="/admin/products">Products</NavLink>
+          </nav>
+          <Routes>
+            <Route index element={<AdminOrders session={session} />} />
+            <Route path="products" element={<AdminProducts />} />
+          </Routes>
+        </>
+      )}
+    </div>
+  )
+}
+
+function AdminOrders({ session }: { session: Session }) {
+  const [orders, setOrders] = useState<StoredOrder[]>([])
+  const [loadError, setLoadError] = useState('')
+  const [filter, setFilter] = useState<OrderStatus | 'all'>('all')
+  const [selected, setSelected] = useState<string | null>(null)
+  const [status, setStatus] = useState<OrderStatus>('placed')
+  const [trackingUrl, setTrackingUrl] = useState('')
+  const [note, setNote] = useState('')
+  const [saveError, setSaveError] = useState('')
+  const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    if (!session) return
+    let cancelled = false
+    listOrders()
+      .then((rows) => {
+        if (!cancelled) setOrders(rows)
+      })
+      .catch((err: unknown) => {
+        if (!cancelled) {
+          setLoadError(err instanceof Error ? err.message : 'Could not load orders.')
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [session])
+
+  function openOrder(order: StoredOrder) {
+    setSelected(order.id)
+    setStatus(order.status)
+    setTrackingUrl(order.tracking_url ?? '')
+    setNote(order.tracking_note ?? '')
+    setSaveError('')
+  }
+
+  async function save(e: FormEvent) {
+    e.preventDefault()
+    if (!selected) return
+    const url = trackingUrl.trim()
+    if (url && !/^https?:\/\//i.test(url)) {
+      setSaveError('Tracking link must start with http:// or https://')
+      return
+    }
+    setSaving(true)
+    setSaveError('')
+    try {
+      await updateOrderStatus(selected, {
+        status,
+        tracking_url: url,
+        tracking_note: note,
+      })
+      setOrders((rows) =>
+        rows.map((row) =>
+          row.id === selected
+            ? {
+                ...row,
+                status,
+                tracking_url: url || null,
+                tracking_note: note.trim() || null,
+                updated_at: new Date().toISOString(),
+              }
+            : row,
+        ),
+      )
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : 'Could not update that order.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const visible = orders.filter((order) => filter === 'all' || order.status === filter)
+  const active = orders.find((order) => order.id === selected) ?? null
+
+  return (
+      <div className="admin-layout">
           <section className="co-card">
             <label className="track-label">
               Status
@@ -292,7 +310,5 @@ export function AdminPage() {
             </section>
           )}
         </div>
-      )}
-    </div>
   )
 }

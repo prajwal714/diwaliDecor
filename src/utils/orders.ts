@@ -24,12 +24,20 @@ export const STATUS_LABEL: Record<OrderStatus, string> = {
 export type TrackedOrder = {
   public_id: string
   status: OrderStatus
+  name: string
+  mobile: string
+  address1: string
+  address2: string | null
   city: string
+  state: string
+  pin: string
+  payment: 'COD' | 'UPI'
+  subtotal: number
   created_at: string
   updated_at: string
   tracking_url: string | null
   tracking_note: string | null
-  items: Array<{ name: string; qty: number }>
+  items: Array<{ id: string; name: string; qty: number; price: number }>
 }
 
 export type StoredOrder = {
@@ -44,7 +52,7 @@ export type StoredOrder = {
   state: string
   pin: string
   payment: 'COD' | 'UPI'
-  items: Array<{ name: string; qty: number; price: number }>
+  items: Array<{ id: string; name: string; qty: number; price: number }>
   subtotal: number
   status: OrderStatus
   tracking_url: string | null
@@ -75,6 +83,7 @@ export async function createOrder(order: OrderDetails): Promise<string> {
     p_pin: order.pin,
     p_payment: order.payment,
     p_items: order.items.map((item) => ({
+      id: item.product.id,
       name: item.product.name,
       qty: item.qty,
       price: item.product.price,

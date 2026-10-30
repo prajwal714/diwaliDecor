@@ -25,6 +25,8 @@ export type Product = {
   features: string[]
   details: string
   badge?: string
+  /** Set from Supabase product_overrides */
+  soldOut?: boolean
   reviews: Review[]
 }
 

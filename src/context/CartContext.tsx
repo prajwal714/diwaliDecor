@@ -2,10 +2,12 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
   type ReactNode,
 } from 'react'
 import type { Product } from '../data/products'
+import { useProducts } from './ProductsContext'
 
 export type CartItem = {
   product: Product
@@ -92,11 +94,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items))
   }, [state.items])
 
-  const itemCount = state.items.reduce((n, i) => n + i.qty, 0)
-  const subtotal = state.items.reduce((n, i) => n + i.product.price * i.qty, 0)
+  const { products } = useProducts()
+  // Re-price from the live product list; drop items that no longer exist.
+  const items = useMemo(
+    () =>
+      state.items.flatMap((i) => {
+        const live = products.find((p) => p.id === i.product.id)
+        return live ? [{ ...i, product: live }] : []
+      }),
+    [state.items, products],
+  )
+  const itemCount = items.reduce((n, i) => n + i.qty, 0)
+  const subtotal = items.reduce((n, i) => n + i.product.price * i.qty, 0)
 
   const value: CartContextValue = {
-    items: state.items,
+    items,
     itemCount,
     subtotal,
     add: (product, qty) => dispatch({ type: 'ADD', product, qty }),

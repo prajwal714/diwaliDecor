@@ -33,6 +33,7 @@ export function ProductCard({ product, onAdded, index = 0 }: Props) {
             height={THUMB_HEIGHT}
             loading="lazy"
           />
+          {product.soldOut && <span className="sold-out-tag">Sold out</span>}
           {product.badge && <span className="badge badge-card">{product.badge}</span>}
         </div>
         <div className="product-body">
@@ -54,6 +55,7 @@ export function ProductCard({ product, onAdded, index = 0 }: Props) {
       <div className="card-actions">
         <button
           type="button"
+          disabled={product.soldOut}
           className="btn btn-cart btn-swipe"
           onClick={() => {
             add(product)
@@ -64,6 +66,7 @@ export function ProductCard({ product, onAdded, index = 0 }: Props) {
         </button>
         <button
           type="button"
+          disabled={product.soldOut}
           className="btn btn-buy-now"
           onClick={() => {
             add(product)

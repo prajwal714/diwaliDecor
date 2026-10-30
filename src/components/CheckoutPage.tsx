@@ -189,6 +189,11 @@ export function CheckoutPage() {
   function goShipping() {
     setError('')
     if (items.length === 0) return
+    const gone = items.find((i) => i.product.soldOut)
+    if (gone) {
+      setError(`${gone.product.name} is sold out. Please remove it from your cart.`)
+      return
+    }
     setStep('shipping')
   }
 
@@ -204,6 +209,11 @@ export function CheckoutPage() {
 
   async function placeOrder() {
     setError('')
+    const gone = items.find((i) => i.product.soldOut)
+    if (gone) {
+      setError(`${gone.product.name} is sold out. Please remove it from your cart.`)
+      return
+    }
     setSaving(true)
     const order: OrderDetails = {
       name: addr.name.trim(),

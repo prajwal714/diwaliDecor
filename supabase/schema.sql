@@ -133,6 +133,7 @@ begin
 
   select jsonb_agg(
     jsonb_build_object(
+      'id', left(btrim(coalesce(item->>'id', '')), 60),
       'name', left(btrim(item->>'name'), 200),
       'qty', least(greatest((item->>'qty')::int, 1), 99),
       'price', greatest((item->>'price')::int, 0)
@@ -144,9 +145,9 @@ begin
   if v_items is null or exists (
     select 1
     from jsonb_array_elements(v_items) as item
-    where length(item->>'name') = 0
+    where length(item->>'name') = 0 or length(item->>'id') = 0
   ) then
-    raise exception 'Each item needs a name';
+    raise exception 'Each item needs an id and a name';
   end if;
 
   for attempt in 1..8 loop
@@ -187,11 +188,21 @@ grant execute on function public.create_order(
   text, text, text, text, text, text, text, text, text, jsonb, integer
 ) to anon, authenticated;
 
-create or replace function public.track_order(p_public_id text, p_mobile text)
+drop function if exists public.track_order(text, text);
+
+create function public.track_order(p_public_id text, p_mobile text)
 returns table (
   public_id text,
   status text,
+  name text,
+  mobile text,
+  address1 text,
+  address2 text,
   city text,
+  state text,
+  pin text,
+  payment text,
+  subtotal integer,
   created_at timestamptz,
   updated_at timestamptz,
   tracking_url text,
@@ -214,13 +225,28 @@ begin
   select
     o.public_id,
     o.status,
+    o.name,
+    o.mobile,
+    o.address1,
+    o.address2,
     o.city,
+    o.state,
+    o.pin,
+    o.payment,
+    o.subtotal,
     o.created_at,
     o.updated_at,
     o.tracking_url,
     o.tracking_note,
     (
-      select jsonb_agg(jsonb_build_object('name', item->>'name', 'qty', (item->>'qty')::int))
+      select jsonb_agg(
+        jsonb_build_object(
+          'id', item->>'id',
+          'name', item->>'name',
+          'qty', (item->>'qty')::int,
+          'price', (item->>'price')::int
+        )
+      )
       from jsonb_array_elements(o.items) as item
     )
   from public.orders o
@@ -231,3 +257,31 @@ $$;
 
 revoke all on function public.track_order(text, text) from public;
 grant execute on function public.track_order(text, text) to anon, authenticated;
+
+
+-- ===== Product overrides (run once) =====
+create table if not exists public.product_overrides (
+  product_id text primary key,
+  price integer check (price is null or price > 0),
+  mrp integer check (mrp is null or mrp > 0),
+  badge text,
+  sold_out boolean not null default false,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.product_overrides enable row level security;
+
+drop policy if exists "overrides read" on public.product_overrides;
+create policy "overrides read" on public.product_overrides
+  for select to anon, authenticated using (true);
+
+drop policy if exists "overrides insert" on public.product_overrides;
+create policy "overrides insert" on public.product_overrides
+  for insert to authenticated with check (true);
+
+drop policy if exists "overrides update" on public.product_overrides;
+create policy "overrides update" on public.product_overrides
+  for update to authenticated using (true) with check (true);
+
+grant select on public.product_overrides to anon, authenticated;
+grant insert, update on public.product_overrides to authenticated;

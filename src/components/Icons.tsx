@@ -42,6 +42,13 @@ export const CheckIcon = ({ size = 18 }: P) => (
   </svg>
 )
 
+export const CopyIcon = ({ size = 18 }: P) => (
+  <svg {...base(size)}>
+    <rect x="9" y="9" width="11" height="11" rx="2" />
+    <path d="M5 15V6a2 2 0 0 1 2-2h9" />
+  </svg>
+)
+
 export const SparkIcon = ({ size = 18 }: P) => (
   <svg {...base(size)} fill="currentColor" stroke="none">
     <path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z" />

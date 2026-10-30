@@ -7,6 +7,7 @@ import {
   useNavigate,
 } from 'react-router-dom'
 import { Analytics } from '@vercel/analytics/react'
+import { ProductsProvider } from './context/ProductsContext'
 import { CartProvider } from './context/CartContext'
 import { Header } from './components/Header'
 import { HomePage } from './components/HomePage'
@@ -36,7 +37,7 @@ function AppShell() {
   const [cartOpen, setCartOpen] = useState(false)
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const isCheckout = pathname === '/checkout' || pathname === '/admin'
+  const isCheckout = pathname === '/checkout' || pathname.startsWith('/admin')
   const openCart = () => setCartOpen(true)
 
   return (
@@ -60,7 +61,7 @@ function AppShell() {
           />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/track" element={<TrackPage />} />
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin/*" element={<AdminPage />} />
         </Routes>
       </main>
       {!isCheckout && <Footer />}
@@ -80,10 +81,12 @@ function AppShell() {
 export default function App() {
   return (
     <BrowserRouter>
-      <CartProvider>
-        <AppShell />
-        <Analytics />
-      </CartProvider>
+      <ProductsProvider>
+        <CartProvider>
+          <AppShell />
+          <Analytics />
+        </CartProvider>
+      </ProductsProvider>
     </BrowserRouter>
   )
 }
