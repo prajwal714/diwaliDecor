@@ -9,7 +9,8 @@ type Props = {
 }
 
 export function ProductGrid({ onAdded }: Props) {
-  const { products } = useProducts()
+  const { products: allProducts } = useProducts()
+  const products = allProducts.filter((p) => p.category !== 'Chhath')
   const [filter, setFilter] = useState<Category | 'All'>('All')
 
   const visible =

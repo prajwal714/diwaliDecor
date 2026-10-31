@@ -49,6 +49,21 @@ async function run() {
     }
   }
 
+  const chhathDir = path.join(publicDir, 'chath', 'banner')
+  if (fs.existsSync(chhathDir)) {
+    for (const file of fs.readdirSync(chhathDir)) {
+      if (!/\.(png|jpe?g)$/i.test(file)) continue
+      const base = file.replace(/\.[^.]+$/, '')
+      for (const w of [800, 1600]) {
+        await writeWebp(
+          path.join(chhathDir, file),
+          path.join(chhathDir, `${base}-${w}.webp`),
+          w,
+        )
+      }
+    }
+  }
+
   const logo = path.join(publicDir, 'logo.png')
   await writeWebp(logo, path.join(publicDir, 'logo-400.webp'), 400)
 }

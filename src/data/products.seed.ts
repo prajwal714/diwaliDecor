@@ -1,4 +1,4 @@
-export type Category = 'Toran'
+export type Category = 'Toran' | 'Chhath'
 
 export type Review = {
   id: string
@@ -27,6 +27,10 @@ export type Product = {
   badge?: string
   /** Set from Supabase product_overrides */
   soldOut?: boolean
+  /** Chhath items only */
+  group?: string
+  hindiName?: string
+  unit?: string
   reviews: Review[]
 }
 

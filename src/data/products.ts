@@ -1,4 +1,5 @@
 import productImages from 'virtual:product-images'
+import { chhathProducts } from './chhath.seed'
 import { seeds, type Category, type Review, type Product } from './products.seed'
 
 export type { Category, Review, Product }
@@ -6,10 +7,12 @@ export type { Category, Review, Product }
 export const categories: Array<Category | 'All'> = ['All', 'Toran']
 
 
-export const products: Product[] = seeds.map(({ imageKey, ...rest }) => {
+const toranProducts: Product[] = seeds.map(({ imageKey, ...rest }) => {
   const images = productImages[imageKey] ?? []
   return { ...rest, image: images[0] ?? '', images }
 })
+
+export const products: Product[] = [...toranProducts, ...chhathProducts]
 
 export function getProduct(id: string) {
   return products.find((p) => p.id === id)

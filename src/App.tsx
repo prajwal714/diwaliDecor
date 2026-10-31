@@ -12,6 +12,7 @@ import { CartProvider } from './context/CartContext'
 import { Header } from './components/Header'
 import { HomePage } from './components/HomePage'
 import { ProductPage } from './components/ProductPage'
+import { ChhathHome, ChhathCategoryPage } from './components/ChhathPage'
 import { CartDrawer } from './components/CartDrawer'
 import { CheckoutPage } from './components/CheckoutPage'
 import { TrackPage } from './components/TrackPage'
@@ -40,6 +41,12 @@ function AppShell() {
   const isCheckout = pathname === '/checkout' || pathname.startsWith('/admin')
   const openCart = () => setCartOpen(true)
 
+  useEffect(() => {
+    const root = document.documentElement
+    if (pathname.startsWith('/chhath')) root.dataset.theme = 'chhath'
+    else delete root.dataset.theme
+  }, [pathname])
+
   return (
     <>
       <HashScroll />
@@ -54,6 +61,16 @@ function AppShell() {
             path="/product/:id"
             element={
               <ProductPage
+                onAdded={openCart}
+                onBuyNow={() => navigate('/checkout')}
+              />
+            }
+          />
+          <Route path="/chhath" element={<ChhathHome />} />
+          <Route
+            path="/chhath/:slug"
+            element={
+              <ChhathCategoryPage
                 onAdded={openCart}
                 onBuyNow={() => navigate('/checkout')}
               />

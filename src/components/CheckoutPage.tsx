@@ -1,3 +1,4 @@
+import { CHHATH_MIN_ORDER } from '../data/chhath.seed'
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
@@ -194,6 +195,15 @@ export function CheckoutPage() {
       setError(`${gone.product.name} is sold out. Please remove it from your cart.`)
       return
     }
+    const chhathTotal = items
+      .filter((i) => i.product.category === 'Chhath')
+      .reduce((n, i) => n + i.product.price * i.qty, 0)
+    if (chhathTotal > 0 && chhathTotal < CHHATH_MIN_ORDER) {
+      setError(
+        `Chhath items need a minimum order of ${formatINR(CHHATH_MIN_ORDER)} (currently ${formatINR(chhathTotal)}). Please add more items.`,
+      )
+      return
+    }
     setStep('shipping')
   }
 
@@ -212,6 +222,15 @@ export function CheckoutPage() {
     const gone = items.find((i) => i.product.soldOut)
     if (gone) {
       setError(`${gone.product.name} is sold out. Please remove it from your cart.`)
+      return
+    }
+    const chhathTotal = items
+      .filter((i) => i.product.category === 'Chhath')
+      .reduce((n, i) => n + i.product.price * i.qty, 0)
+    if (chhathTotal > 0 && chhathTotal < CHHATH_MIN_ORDER) {
+      setError(
+        `Chhath items need a minimum order of ${formatINR(CHHATH_MIN_ORDER)} (currently ${formatINR(chhathTotal)}). Please add more items.`,
+      )
       return
     }
     setSaving(true)
