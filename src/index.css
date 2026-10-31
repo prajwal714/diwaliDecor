@@ -3424,4 +3424,10 @@ h3 {
 @media (max-width: 380px) {
   :root[data-theme='chhath'] .nav-link { font-size: 0.85rem; padding: 0.4rem 0.35rem; }
 }
-html, body { overflow-x: clip; }
+html, body { overflow-x: hidden; max-width: 100%; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+.top-chrome { max-width: 100%; overflow-x: clip; }
+@media (max-width: 560px) {
+  .header-nav { padding-right: 6px; box-sizing: border-box; }
+  .cart-icon-btn { flex: 0 0 auto; }
+}
