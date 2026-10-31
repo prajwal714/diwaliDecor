@@ -277,7 +277,7 @@ export function ChhathCategoryPage({ onAdded, onBuyNow }: Props) {
 
       <div className="chhath-builder">
         <aside className="chhath-art" aria-label="Package">
-          <ChhathImage src={info.image} alt={info.title} sizes="(max-width: 900px) 100vw, 340px" eager />
+          <ChhathImage src={info.image} alt={info.title} sizes="(max-width: 1023px) 120px, 340px" eager />
           <div className="chhath-art-text">
             <span className="chhath-badge">{info.badge}</span>
             <h1>{info.title}</h1>

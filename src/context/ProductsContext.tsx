@@ -12,7 +12,6 @@ import {
   getSimilarProducts as similarFrom,
   type Product,
 } from '../data/products'
-import { supabase } from '../lib/supabase'
 
 export type ProductOverride = {
   product_id: string
@@ -59,6 +58,7 @@ type Value = {
 const ProductsContext = createContext<Value | null>(null)
 
 export async function fetchOverrides(): Promise<ProductOverride[]> {
+  const { supabase } = await import('../lib/supabase')
   if (!supabase) return []
   const { data, error } = await supabase
     .from('product_overrides')
@@ -81,7 +81,14 @@ export function ProductsProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
-    void refresh()
+    // Defer the Supabase chunk until after first paint so it never blocks LCP.
+    const run = () => void refresh()
+    if ('requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(run, { timeout: 3000 })
+      return () => window.cancelIdleCallback(id)
+    }
+    const t = setTimeout(run, 1500)
+    return () => clearTimeout(t)
   }, [refresh])
 
   const value = useMemo<Value>(() => {
