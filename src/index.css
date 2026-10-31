@@ -3404,8 +3404,9 @@ h3 {
   .header { gap: 0.25rem; padding-left: 0.6rem; padding-right: 0.6rem; }
   .brand { flex: 0 1 auto; min-width: 0; }
   .brand img { height: 34px; max-width: 100%; }
-  .header-nav { gap: 0; flex: 0 0 auto; }
-  .nav-link { font-size: 0.92rem; padding: 0.4rem 0.45rem; }
+  .header { flex-wrap: wrap; justify-content: center; row-gap: 0.1rem; max-width: 100vw; box-sizing: border-box; }
+  .header-nav { gap: 0; flex: 1 1 100%; justify-content: space-between; min-width: 0; }
+  .nav-link { font-size: 0.95rem; padding: 0.4rem 0.5rem; }
   .cart-icon-btn { padding: 0.35rem; }
   .cart-icon-btn svg { width: 26px; height: 26px; }
 }
