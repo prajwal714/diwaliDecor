@@ -1,4 +1,4 @@
-import type { Product } from './products.seed'
+import type { Product } from './products.seed.ts'
 
 /** Minimum order value (INR) for Chhath items in a cart. */
 export const CHHATH_MIN_ORDER = 2500
@@ -25,6 +25,13 @@ export type ChhathGroupInfo = {
 }
 
 export const chhathHeroImages = [1, 2, 3, 4].map((n) => `/chath/banner/hero-${n}.png`)
+
+/** Package tile banner for link previews (WhatsApp, etc.). */
+export function chhathPackageOgImage(bannerPath: string): string {
+  if (/-\d+\.webp$/i.test(bannerPath)) return bannerPath
+  const base = bannerPath.replace(/\.[^.]+$/, '')
+  return `${base}-800.webp`
+}
 
 export const chhathGroupInfo: ChhathGroupInfo[] = [
   {

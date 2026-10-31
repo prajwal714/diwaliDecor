@@ -6,9 +6,64 @@ import {
   CHHATH_MIN_ORDER,
   chhathGroupInfo,
   chhathHeroImages,
+  type ChhathGroupInfo,
 } from '../data/chhath.seed'
-import { formatINR, chatUrl } from '../utils/whatsapp'
-import { BagIcon, CashIcon, CheckIcon, GiftIcon, LockIcon, SparkIcon, TruckIcon } from './Icons'
+import { shopConfig } from '../config'
+import { chatUrl, formatINR } from '../utils/whatsapp'
+import {
+  BagIcon,
+  CashIcon,
+  CheckIcon,
+  GiftIcon,
+  LockIcon,
+  ShareIcon,
+  SparkIcon,
+  TruckIcon,
+} from './Icons'
+
+async function shareChhathPackage(pkg: Pick<ChhathGroupInfo, 'slug' | 'title'>) {
+  const url = `${shopConfig.siteUrl}/chhath/${pkg.slug}`
+  const title = `${pkg.title} — Chhath Puja`
+  if (navigator.share) {
+    try {
+      await navigator.share({ title, text: title, url })
+    } catch {
+      /* cancelled */
+    }
+    return false
+  }
+  await navigator.clipboard?.writeText(url)
+  return true
+}
+
+function ChhathPackageShareButton({
+  pkg,
+  className,
+}: {
+  pkg: Pick<ChhathGroupInfo, 'slug' | 'title'>
+  className?: string
+}) {
+  const [copied, setCopied] = useState(false)
+  return (
+    <button
+      type="button"
+      className={className ?? 'pdp-quick-btn'}
+      title="Share this package"
+      aria-label={`Share ${pkg.title}`}
+      onClick={async (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const didCopy = await shareChhathPackage(pkg)
+        if (didCopy) {
+          setCopied(true)
+          setTimeout(() => setCopied(false), 2000)
+        }
+      }}
+    >
+      <ShareIcon size={18} /> <span>{copied ? 'Copied!' : 'Share'}</span>
+    </button>
+  )
+}
 
 function ChhathImage({
   src,
@@ -123,8 +178,7 @@ export function ChhathHome() {
                 <span className="chhath-tile-hi" lang="hi">{g.hindi}</span>
                 <p>{g.tagline}</p>
                 <p>{count} items to choose from</p>
-                <span className="chhath-tile-cta">Choose items →</span>
-              </div>
+                <span className="chhath-tile-cta">Choose items →</span>              </div>
             </Link>
           )
         })}
@@ -328,6 +382,9 @@ export function ChhathCategoryPage({ onAdded, onBuyNow }: Props) {
             >
               {!canCheckout && <LockIcon size={16} />} Checkout
             </button>
+            <div className="pdp-quick">
+              <ChhathPackageShareButton pkg={info} className="pdp-quick-btn" />
+            </div>
           </div>
 
           <div className="chhath-more">
