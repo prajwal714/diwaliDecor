@@ -3398,3 +3398,18 @@ h3 {
   .chhath-summary-cta { position: sticky; bottom: 0; background: var(--surface); padding: 12px 0 calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid var(--border); order: 3; }
   .chhath-more { order: 4; }
 }
+
+/* Mobile header: keep logo + nav items + cart inside the viewport */
+@media (max-width: 560px) {
+  .header { gap: 0.25rem; padding-left: 0.6rem; padding-right: 0.6rem; }
+  .brand { flex: 0 1 auto; min-width: 0; }
+  .brand img { height: 34px; max-width: 100%; }
+  .header-nav { gap: 0; flex: 0 0 auto; }
+  .nav-link { font-size: 0.92rem; padding: 0.4rem 0.45rem; }
+  .cart-icon-btn { padding: 0.35rem; }
+  .cart-icon-btn svg { width: 26px; height: 26px; }
+}
+@media (max-width: 380px) {
+  .brand img { height: 28px; }
+  .nav-link { font-size: 0.85rem; padding: 0.4rem 0.35rem; }
+}
