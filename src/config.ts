@@ -2,7 +2,7 @@ export const shopConfig = {
   brandName: 'Devamkart',
   /** Public site URL (used for the share QR code) */
   siteUrl: 'https://www.devamkart.com',
-  tagline: 'Handcrafted festive torans for homes across India',
+  tagline: 'Festive decor, puja samagri and prasad essentials for homes across India',
   /** WhatsApp number with country code, digits only */
   whatsappNumber: '917838363629',
   /** WhatsApp Business short link (no prefilled text support) */

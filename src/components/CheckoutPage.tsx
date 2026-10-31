@@ -608,7 +608,7 @@ export function CheckoutPage() {
                   <ArrowLeftIcon /> Back to {step === 'payment' ? 'Shipping' : 'Cart'}
                 </button>
               ) : (
-                <Link to="/#shop" className="link-btn co-back">
+                <Link to="/" className="link-btn co-back">
                   <ArrowLeftIcon /> Continue shopping
                 </Link>
               )}

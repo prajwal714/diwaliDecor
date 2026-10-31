@@ -219,6 +219,12 @@ function productPages(): Plugin {
           price: seed.price,
         })
       }
+      writeOgPage(tpl, outDir, ['diwali'], {
+        url: `${site}/diwali`,
+        title: `Diwali Torans & Festive Decor | ${shopConfig.brandName}`,
+        desc: 'Handcrafted festive torans, wall hangings and door decor for your Diwali home. Delivered across India. Order on WhatsApp.',
+        ogImage: `${site}/banner-1-1600.webp`,
+      })
       for (const g of chhathGroupInfo) {
         const ogImage = site + chhathPackageOgImage(g.image)
         const url = `${site}/chhath/${g.slug}`

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
   BrowserRouter,
+  Navigate,
   Route,
   Routes,
   useLocation,
@@ -29,6 +30,10 @@ function HashScroll() {
   useEffect(() => {
     if (location.hash === '#shop') {
       requestAnimationFrame(() => scrollToShop())
+    } else if (location.hash === '#chhath-shop') {
+      requestAnimationFrame(() =>
+        document.getElementById('chhath-shop')?.scrollIntoView({ behavior: 'smooth' }),
+      )
     }
   }, [location])
   return null
@@ -43,7 +48,7 @@ function AppShell() {
 
   useEffect(() => {
     const root = document.documentElement
-    if (pathname.startsWith('/chhath')) root.dataset.theme = 'chhath'
+    if (pathname === '/' || pathname.startsWith('/chhath')) root.dataset.theme = 'chhath'
     else delete root.dataset.theme
   }, [pathname])
 
@@ -53,8 +58,9 @@ function AppShell() {
       {!isCheckout && <Header onOpenCart={openCart} />}
       <main>
         <Routes>
+          <Route path="/" element={<ChhathHome />} />
           <Route
-            path="/"
+            path="/diwali"
             element={<HomePage onAdded={openCart} onShop={scrollToShop} />}
           />
           <Route
@@ -66,7 +72,7 @@ function AppShell() {
               />
             }
           />
-          <Route path="/chhath" element={<ChhathHome />} />
+          <Route path="/chhath" element={<Navigate to="/" replace />} />
           <Route
             path="/chhath/:slug"
             element={

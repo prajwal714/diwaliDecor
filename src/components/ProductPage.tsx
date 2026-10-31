@@ -66,7 +66,7 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
   )
 
   if (!product) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/diwali" replace />
   }
 
   const avg = averageRating(product.reviews)
@@ -91,7 +91,7 @@ export function ProductPage({ onAdded, onBuyNow }: Props) {
       <nav className="breadcrumb" aria-label="Breadcrumb">
         <Link to="/">Home</Link>
         <span>/</span>
-        <Link to="/#shop">{product.category}</Link>
+        <Link to="/diwali#shop">{product.category}</Link>
         <span>/</span>
         <span aria-current="page">{product.name}</span>
       </nav>

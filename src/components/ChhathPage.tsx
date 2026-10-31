@@ -238,7 +238,7 @@ export function ChhathCategoryPage({ onAdded, onBuyNow }: Props) {
     () => products.filter((p) => p.category === 'Chhath' && p.group === info?.group),
     [products, info],
   )
-  if (!info) return <Navigate to="/chhath" replace />
+  if (!info) return <Navigate to="/" replace />
 
   const selected = list.filter((p) => (qty[p.id] ?? 0) > 0)
   const selectedCount = selected.reduce((n, p) => n + qty[p.id], 0)
@@ -263,8 +263,6 @@ export function ChhathCategoryPage({ onAdded, onBuyNow }: Props) {
     <div className="chhath-builder-page">
       <nav className="breadcrumb" aria-label="Breadcrumb">
         <Link to="/">Home</Link>
-        <span>/</span>
-        <Link to="/chhath">Chhath Puja</Link>
         <span>/</span>
         <span aria-current="page">{info.title}</span>
       </nav>

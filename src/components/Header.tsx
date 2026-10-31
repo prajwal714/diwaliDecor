@@ -13,11 +13,13 @@ export function Header({ onOpenCart }: Props) {
   const location = useLocation()
 
   function goShop() {
-    if (location.pathname !== '/') {
-      navigate('/#shop')
+    const onDiwali = location.pathname === '/diwali'
+    const id = onDiwali ? 'shop' : 'chhath-shop'
+    if (location.pathname !== '/' && !onDiwali) {
+      navigate('/#chhath-shop')
       return
     }
-    document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' })
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
@@ -40,12 +42,19 @@ export function Header({ onOpenCart }: Props) {
           <button type="button" className="nav-link" onClick={goShop}>
             Shop
           </button>
-          <Link to="/" className={location.pathname === '/' ? 'nav-link active' : 'nav-link'}>
+          <Link
+            to="/diwali"
+            className={location.pathname === '/diwali' ? 'nav-link active' : 'nav-link'}
+          >
             Diwali
           </Link>
           <Link
-            to="/chhath"
-            className={location.pathname.startsWith('/chhath') ? 'nav-link active' : 'nav-link'}
+            to="/"
+            className={
+              location.pathname === '/' || location.pathname.startsWith('/chhath')
+                ? 'nav-link active'
+                : 'nav-link'
+            }
           >
             Chhath
           </Link>
