@@ -8,7 +8,7 @@ import {
   chhathHeroImages,
 } from '../data/chhath.seed'
 import { formatINR, chatUrl } from '../utils/whatsapp'
-import { BagIcon, CashIcon, CheckIcon, GiftIcon, SparkIcon, TruckIcon } from './Icons'
+import { BagIcon, CashIcon, CheckIcon, GiftIcon, LockIcon, SparkIcon, TruckIcon } from './Icons'
 
 function ChhathImage({
   src,
@@ -52,15 +52,15 @@ function ChhathHero() {
     return () => window.clearInterval(t)
   }, [active])
   return (
-    <section className="banner chhath-banner" aria-label="Chhath Pooja">
+    <section className="banner chhath-banner" aria-label="Chhath Puja">
       {chhathHeroImages.map((src, i) => (
         <div key={src} className={i === active ? 'banner-slide active' : 'banner-slide'} aria-hidden={i !== active}>
           <ChhathImage src={src} alt="" sizes="100vw" className="banner-img" eager={i === 0} />
           {i === active && (
             <div className="banner-copy">
               <img className="banner-mark" src="/favicon.png" alt="" width={48} height={48} />
-              <p className="banner-eyebrow">Happy Chhath Pooja</p>
-              <h1 className="banner-title">Chath Pooja</h1>
+              <p className="banner-eyebrow">Happy Chhath Puja</p>
+              <h1 className="banner-title">Chhath Puja</h1>
               <p className="banner-text">
                 Puja samagri, fresh fruits and prasad ingredients, all in one place.
               </p>
@@ -72,7 +72,7 @@ function ChhathHero() {
                     document.getElementById('chhath-shop')?.scrollIntoView({ behavior: 'smooth' })
                   }
                 >
-                  Explore Chath Pooja Offerings
+                  Explore Chhath Puja Offerings
                 </button>
               </div>
             </div>
@@ -102,6 +102,15 @@ export function ChhathHome() {
     <>
       <ChhathHero />
       <div className="chhath-home" id="chhath-shop">
+      <div className="section-head">
+        <h2>Shop the Chhath collection</h2>
+        <p>Puja samagri, fresh fruits and prasad ingredients, made for Chhath Puja homes across India.</p>
+        <p className="chhath-hi" lang="hi">छठ पूजा के लिए पूजा सामग्री, फल और प्रसाद की सामग्री</p>
+      </div>
+      <div className="catalog-toolbar">
+        <p className="product-count">{chhathGroupInfo.length} packages · choose your own quantities</p>
+        <p className="product-count">Minimum order {formatINR(CHHATH_MIN_ORDER)}</p>
+      </div>
       <div className="chhath-tiles">
         {chhathGroupInfo.map((g) => {
           const count = products.filter((p) => p.group === g.group).length
@@ -109,8 +118,9 @@ export function ChhathHome() {
             <Link key={g.slug} to={`/chhath/${g.slug}`} className={`chhath-tile t-${g.slug}`}>
               <ChhathImage src={g.image} alt="" sizes="(max-width: 800px) 100vw, 33vw" className="chhath-tile-img" />
               <div className="chhath-tile-text">
+                <span className="chhath-badge">{g.badge}</span>
                 <h2>{g.title}</h2>
-                <span className="chhath-tile-hi">{g.hindi}</span>
+                <span className="chhath-tile-hi" lang="hi">{g.hindi}</span>
                 <p>{g.tagline}</p>
                 <p>{count} items to choose from</p>
                 <span className="chhath-tile-cta">Choose items →</span>
@@ -119,7 +129,11 @@ export function ChhathHome() {
           )
         })}
       </div>
-      <p className="chhath-note">Authentic · Pure · Convenient — Better prices than online</p>
+      <ul className="chhath-values">
+        <li><CheckIcon /> Fresh &amp; Authentic</li>
+        <li><TruckIcon size={20} /> Pan-India Delivery</li>
+        <li><CashIcon size={20} /> UPI / Cash on Delivery</li>
+      </ul>
       </div>
     </>
   )
@@ -127,12 +141,44 @@ export function ChhathHome() {
 
 type Props = { onAdded: () => void; onBuyNow: () => void }
 
+function Thumb({ name, src }: { name: string; src?: string }) {
+  const [failed, setFailed] = useState(false)
+  if (!src || failed) {
+    return (
+      <span className="chhath-thumb chhath-thumb-ph" aria-hidden="true">
+        {name.charAt(0)}
+      </span>
+    )
+  }
+  return (
+    <img
+      className="chhath-thumb"
+      src={src}
+      alt=""
+      loading="lazy"
+      onError={() => setFailed(true)}
+    />
+  )
+}
+
+function pluralise(n: number, word: string) {
+  return `${n} ${word}${n === 1 ? '' : 's'}`
+}
+
+/** "3 items" when each product has qty 1, otherwise "1 item · 3 units". */
+function selectionLabel(products: number, units: number) {
+  if (products === units) return pluralise(units, 'item')
+  return `${pluralise(products, 'item')} · ${pluralise(units, 'unit')}`
+}
+
 export function ChhathCategoryPage({ onAdded, onBuyNow }: Props) {
   const { slug } = useParams()
   const info = chhathGroupInfo.find((g) => g.slug === slug)
   const { products } = useProducts()
   const { items, add } = useCart()
   const [qty, setQty] = useState<Record<string, number>>({})
+  const [view, setView] = useState<'list' | 'grid'>('list')
+  const [sheetOpen, setSheetOpen] = useState(false)
 
   const list = useMemo(
     () => products.filter((p) => p.category === 'Chhath' && p.group === info?.group),
@@ -141,6 +187,7 @@ export function ChhathCategoryPage({ onAdded, onBuyNow }: Props) {
   if (!info) return <Navigate to="/chhath" replace />
 
   const selected = list.filter((p) => (qty[p.id] ?? 0) > 0)
+  const selectedCount = selected.reduce((n, p) => n + qty[p.id], 0)
   const selectionTotal = selected.reduce((n, p) => n + p.price * qty[p.id], 0)
   const inCartTotal = items
     .filter((i) => i.product.category === 'Chhath')
@@ -148,6 +195,7 @@ export function ChhathCategoryPage({ onAdded, onBuyNow }: Props) {
   const total = selectionTotal + inCartTotal
   const remaining = Math.max(0, CHHATH_MIN_ORDER - total)
   const pct = Math.min(100, Math.round((total / CHHATH_MIN_ORDER) * 100))
+  const canCheckout = total >= CHHATH_MIN_ORDER && (selected.length > 0 || inCartTotal > 0)
 
   function change(id: string, delta: number) {
     setQty((q) => ({ ...q, [id]: Math.max(0, (q[id] ?? 0) + delta) }))
@@ -158,7 +206,7 @@ export function ChhathCategoryPage({ onAdded, onBuyNow }: Props) {
   }
 
   return (
-    <div className="product-page">
+    <div className="chhath-builder-page">
       <nav className="breadcrumb" aria-label="Breadcrumb">
         <Link to="/">Home</Link>
         <span>/</span>
@@ -167,116 +215,166 @@ export function ChhathCategoryPage({ onAdded, onBuyNow }: Props) {
         <span aria-current="page">{info.title}</span>
       </nav>
 
-      <section className="pdp">
-        <div className="chhath-cat">
-          <div className="chhath-cat-art">
-            <ChhathImage src={info.image} alt={info.title} sizes="(max-width: 900px) 100vw, 30vw" className="chhath-cat-banner" eager />
+      <div className="chhath-builder">
+        <aside className="chhath-art" aria-label="Package">
+          <ChhathImage src={info.image} alt={info.title} sizes="(max-width: 900px) 100vw, 340px" eager />
+          <div className="chhath-art-text">
+            <span className="chhath-badge">{info.badge}</span>
+            <h1>{info.title}</h1>
+            <p className="chhath-hi" lang="hi">{info.hindi}</p>
+            <p className="chhath-art-tag">{info.tagline}</p>
           </div>
-          <div className="chhath-items">
-          {list.map((p) => {
-            const q = qty[p.id] ?? 0
-            return (
-              <div key={p.id} className={q > 0 ? 'chhath-item on' : 'chhath-item'}>
-                <div className="chhath-item-info">
-                  <strong>{p.name}</strong>
-                  <span className="chhath-item-hi">{p.hindiName}</span>
-                  <span className="chhath-item-meta">{p.unit} · {formatINR(p.price)}</span>
-                </div>
-                {p.soldOut ? (
-                  <span className="chhath-sold">Sold out</span>
-                ) : (
-                  <div className="chhath-stepper">
-                    <button type="button" aria-label={`Decrease ${p.name}`} disabled={q === 0} onClick={() => change(p.id, -1)}>−</button>
-                    <span>{q}</span>
-                    <button type="button" aria-label={`Increase ${p.name}`} onClick={() => change(p.id, 1)}>+</button>
+        </aside>
+
+        <section className="chhath-select" aria-label="Choose items">
+          <div className="chhath-select-head">
+            <h2>Choose your items</h2>
+            <div className="chhath-view" role="group" aria-label="View">
+              <button type="button" aria-pressed={view === 'list'} onClick={() => setView('list')}>List</button>
+              <button type="button" aria-pressed={view === 'grid'} onClick={() => setView('grid')}>Grid</button>
+            </div>
+          </div>
+          <ul className={view === 'grid' ? 'chhath-items grid' : 'chhath-items'}>
+            {list.map((p) => {
+              const q = qty[p.id] ?? 0
+              return (
+                <li key={p.id} className={q > 0 ? 'chhath-item on' : 'chhath-item'}>
+                  <Thumb name={p.name} src={p.images[0]} />
+                  <div className="chhath-item-info">
+                    <strong>{p.name}</strong>
+                    <span className="chhath-hi" lang="hi">{p.hindiName}</span>
+                    <span className="chhath-item-meta">{p.unit} · {formatINR(p.price)}</span>
                   </div>
-                )}
-              </div>
-            )
-          })}
-          </div>
-        </div>
-
-        <div className="pdp-info">
-          <h1>{info.title}</h1>
-          <p className="chhath-hindi">{info.hindi}</p>
-          <p className="pdp-size-note">{info.tagline}</p>
-
-          <div className="chhath-minbox">
-            <strong>{formatINR(total)}</strong>
-            <span>
-              {remaining > 0
-                ? `Add ${formatINR(remaining)} more to reach the ${formatINR(CHHATH_MIN_ORDER)} minimum`
-                : 'Minimum order reached'}
-            </span>
-            <div className="chhath-progress"><div style={{ width: `${pct}%` }} /></div>
-            <span>{selected.length} item{selected.length === 1 ? '' : 's'} selected</span>
-          </div>
-
-          <button
-            type="button"
-            className="btn btn-cart btn-swipe pdp-add"
-            disabled={selected.length === 0}
-            onClick={() => { addAll(); onAdded() }}
-          >
-            <span className="btn-swipe-label"><BagIcon /> Add selection to cart</span>
-          </button>
-          <button
-            type="button"
-            className="btn pdp-buy-now"
-            disabled={(selected.length === 0 && inCartTotal === 0) || total < CHHATH_MIN_ORDER}
-            onClick={() => { addAll(); onBuyNow() }}
-          >
-            Buy it now
-          </button>
-          {total < CHHATH_MIN_ORDER && (
-            <p className="chhath-buy-hint">
-              Buy it now unlocks at {formatINR(CHHATH_MIN_ORDER)}
-            </p>
-          )}
-
-          <div className="pdp-love">
-            <span className="pdp-love-tag">Highlights</span>
-            <ul>
-              {info.highlights.map((f) => (
-                <li key={f}><SparkIcon /><span>{f}</span></li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="pdp-perks">
-            <div><TruckIcon /><strong>Pan-India delivery</strong><span>Doorstep</span></div>
-            <div><CashIcon /><strong>UPI or COD</strong><span>Pay your way</span></div>
-            <div><GiftIcon /><strong>Pure and fresh</strong><span>Authentic</span></div>
-          </div>
-
-          <ul className="pdp-trust">
-            <li><CheckIcon /> Quality products, authentic and pure</li>
-            <li><CheckIcon /> Better prices than online</li>
-            <li><CheckIcon /> Convenient and reliable service</li>
+                  {p.soldOut ? (
+                    <span className="chhath-sold">Sold out</span>
+                  ) : (
+                    <div className="chhath-stepper-wrap">
+                      {q > 0 && <span className="chhath-added"><CheckIcon size={14} /> Added</span>}
+                      <div className="chhath-stepper">
+                        <button type="button" aria-label={`Decrease ${p.name}`} disabled={q === 0} onClick={() => change(p.id, -1)}>−</button>
+                        <output aria-live="polite">{q}</output>
+                        <button type="button" aria-label={`Increase ${p.name}`} onClick={() => change(p.id, 1)}>+</button>
+                      </div>
+                    </div>
+                  )}
+                </li>
+              )
+            })}
           </ul>
+        </section>
 
-          <details className="pdp-accordion" open>
-            <summary>Package details</summary>
-            <p>{info.details}</p>
-          </details>
-          <details className="pdp-accordion">
-            <summary>Delivery &amp; payment</summary>
-            <p>
-              Delivery across India. Pay by UPI QR at checkout or cash on delivery. Orders are
-              confirmed on{' '}
-              <a href={chatUrl()} target="_blank" rel="noopener noreferrer">WhatsApp</a>.
-              Minimum order for Chhath items is {formatINR(CHHATH_MIN_ORDER)}.
-            </p>
-          </details>
-
-          <div className="chhath-others">
-            {chhathGroupInfo.filter((g) => g.slug !== info.slug).map((g) => (
-              <Link key={g.slug} to={`/chhath/${g.slug}`}>{g.title}</Link>
-            ))}
+        <div
+          className={sheetOpen ? 'chhath-sheet-backdrop open' : 'chhath-sheet-backdrop'}
+          onClick={() => setSheetOpen(false)}
+          aria-hidden="true"
+        />
+        <aside
+          className={sheetOpen ? 'chhath-summary open' : 'chhath-summary'}
+          aria-label="Order summary"
+        >
+          <div className="chhath-summary-head">
+            <h2>Your basket</h2>
+            <button type="button" className="chhath-sheet-close" onClick={() => setSheetOpen(false)} aria-label="Close basket">×</button>
           </div>
+          <div className="chhath-summary-body">
+            <p className="chhath-total">{formatINR(total)}</p>
+            <p className="chhath-count">
+              {selectedCount === 0 ? 'Nothing selected yet' : `${selectionLabel(selected.length, selectedCount)} selected`}
+              {inCartTotal > 0 && ` · ${formatINR(inCartTotal)} already in cart`}
+            </p>
+            <div
+              className="chhath-progress"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={CHHATH_MIN_ORDER}
+              aria-valuenow={Math.min(total, CHHATH_MIN_ORDER)}
+              aria-label="Minimum order progress"
+            >
+              <div style={{ width: `${pct}%` }} />
+            </div>
+            <p className={remaining > 0 ? 'chhath-min' : 'chhath-min ok'}>
+              {remaining > 0
+                ? `Add ${formatINR(remaining)} more to reach the ${formatINR(CHHATH_MIN_ORDER)} minimum.`
+                : 'Minimum order reached. Checkout unlocked.'}
+            </p>
+            {selected.length > 0 && (
+              <ul className="chhath-sel-list">
+                {selected.map((p) => (
+                  <li key={p.id}>
+                    <span>{p.name} × {qty[p.id]}</span>
+                    <b>{formatINR(p.price * qty[p.id])}</b>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div className="chhath-summary-cta">
+            <button
+              type="button"
+              className="chhath-btn primary"
+              disabled={selected.length === 0}
+              onClick={() => { addAll(); setSheetOpen(false); onAdded() }}
+            >
+              <BagIcon />{' '}
+              {selected.length === 0
+                ? 'Add items to cart'
+                : `Add ${selectionLabel(selected.length, selectedCount)} · ${formatINR(selectionTotal)} to cart`}
+            </button>
+            <button
+              type="button"
+              className="chhath-btn outline"
+              disabled={!canCheckout}
+              onClick={() => { addAll(); onBuyNow() }}
+            >
+              {!canCheckout && <LockIcon size={16} />} Checkout
+            </button>
+          </div>
+
+          <div className="chhath-more">
+            <details>
+              <summary>Highlights</summary>
+              <ul>
+                {info.highlights.map((f) => (
+                  <li key={f}><SparkIcon size={16} /><span>{f}</span></li>
+                ))}
+              </ul>
+            </details>
+            <details>
+              <summary>Package details</summary>
+              <p>{info.details}</p>
+            </details>
+            <details>
+              <summary>Delivery &amp; payment</summary>
+              <p>
+                Delivery across India. Pay by UPI QR at checkout or cash on delivery. Orders are
+                confirmed on{' '}
+                <a href={chatUrl()} target="_blank" rel="noopener noreferrer">WhatsApp</a>.
+                Minimum order for Chhath items is {formatINR(CHHATH_MIN_ORDER)}.
+              </p>
+            </details>
+            <ul className="chhath-trust">
+              <li><CheckIcon size={16} /> Quality products, authentic and pure</li>
+              <li><GiftIcon size={16} /> Better prices than online</li>
+              <li><TruckIcon size={16} /> Pan-India delivery</li>
+            </ul>
+            <div className="chhath-others">
+              {chhathGroupInfo.filter((g) => g.slug !== info.slug).map((g) => (
+                <Link key={g.slug} to={`/chhath/${g.slug}`}>{g.title}</Link>
+              ))}
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div className="chhath-bottombar">
+        <div>
+          <strong>{formatINR(total)}</strong>
+          <span>{selectedCount === 0 ? 'Nothing selected' : selectionLabel(selected.length, selectedCount)}</span>
         </div>
-      </section>
+        <button type="button" className="chhath-btn primary" onClick={() => setSheetOpen(true)}>
+          View Basket
+        </button>
+      </div>
     </div>
   )
 }

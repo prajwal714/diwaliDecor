@@ -15,6 +15,7 @@ export type ChhathGroupInfo = {
   slug: string
   group: ChhathGroup
   title: string
+  badge: string
   hindi: string
   /** Full path of the tile/category image in /public */
   image: string
@@ -28,6 +29,7 @@ export const chhathHeroImages = [1, 2, 3, 4].map((n) => `/chath/banner/hero-${n}
 export const chhathGroupInfo: ChhathGroupInfo[] = [
   {
     slug: 'puja',
+    badge: 'PUJA KIT',
     group: 'Puja Essentials',
     title: 'Puja Essentials Package',
     hindi: 'पूजा सामग्री पैकेज',
@@ -44,6 +46,7 @@ export const chhathGroupInfo: ChhathGroupInfo[] = [
   },
   {
     slug: 'fruits',
+    badge: 'FRESH OFFERINGS',
     group: 'Fruits',
     title: 'Fruit Packages',
     hindi: 'फल पैकेज',
@@ -60,6 +63,7 @@ export const chhathGroupInfo: ChhathGroupInfo[] = [
   },
   {
     slug: 'prasad',
+    badge: 'PRASAD INGREDIENTS',
     group: 'Prasad Ingredients',
     title: 'Prasad Making Package',
     hindi: 'प्रसाद बनाने का पैकेज',
@@ -185,9 +189,91 @@ const prasad: Row[] = [
   ['dry-dates', 'Dry Dates', 'छुआरा', '250 gm'],
 ]
 
+/**
+ * Item photos in public/chath/items/. Map product id -> file base name
+ * (without extension). `npm run images` creates <base>-400.webp / -800.webp.
+ */
+const itemImages: Record<string, string> = {
+  'chhath-agarbatti': 'agarbatti',
+  'chhath-akshat': 'akshat',
+  'chhath-amla': 'amla',
+  'chhath-amul-ghee': 'ghee',
+  'chhath-avocado': 'avocado',
+  'chhath-banana': 'banana',
+  'chhath-batasha': 'batasha',
+  'chhath-ber': 'ber',
+  'chhath-betel-leaves': 'betel-leaves',
+  'chhath-betel-nuts': 'betel-nuts',
+  'chhath-blueberry': 'blueberry',
+  'chhath-camphor': 'camphor',
+  'chhath-cardamom-prasad': 'cardamom',
+  'chhath-cardamom-puja': 'cardamom',
+  'chhath-chana-dal': 'chana-dal',
+  'chhath-cloves': 'cloves',
+  'chhath-coconut-husk': 'coconut-husk',
+  'chhath-coconut-plain': 'coconut-plain',
+  'chhath-daabh': 'daabh',
+  'chhath-datun': 'datun',
+  'chhath-daura': 'wooden-daura',
+  'chhath-dhoop': 'dhoop',
+  'chhath-dhoti': 'dhoti',
+  'chhath-diyas': 'diyas',
+  'chhath-dragon-fruit': 'dragon-fruit',
+  'chhath-dry-dates': 'dry-dates',
+  'chhath-fennel': 'fennel',
+  'chhath-fruit-pkg-2-5': 'fruit-package',
+  'chhath-fruit-pkg-5': 'fruit-package',
+  'chhath-gamcha': 'gamcha',
+  'chhath-gangajal': 'gangajal',
+  'chhath-ghee-puja': 'ghee',
+  'chhath-ghee-wicks': 'ghee-wicks',
+  'chhath-ginger-leaves': 'ginger-leaves',
+  'chhath-grapes': 'grapes',
+  'chhath-grated-coconut': 'grated-coconut',
+  'chhath-guava': 'guava',
+  'chhath-honey': 'honey',
+  'chhath-imported-orange': 'imported-orange',
+  'chhath-jaggery': 'jaggery',
+  'chhath-kalash': 'kalash',
+  'chhath-kiwi': 'kiwi',
+  'chhath-longan': 'longan',
+  'chhath-lota': 'copper-lota',
+  'chhath-mango-wood': 'mango-wood',
+  'chhath-matchbox': 'matchbox',
+  'chhath-mauli': 'mauli',
+  'chhath-nagpur-orange': 'nagpur-orange',
+  'chhath-panchmeva': 'panchmeva',
+  'chhath-pear': 'pear',
+  'chhath-pineapple': 'pineapple',
+  'chhath-pink-lady': 'pink-lady',
+  'chhath-pomegranate': 'pomegranate',
+  'chhath-puja-flowers': 'puja-flowers',
+  'chhath-puja-thali': 'puja-thali',
+  'chhath-radish': 'radish',
+  'chhath-rice-flour': 'rice-flour',
+  'chhath-royal-gala': 'royal-gala',
+  'chhath-sharifa': 'sharifa',
+  'chhath-shimla-apple': 'shimla-apple',
+  'chhath-sindoor': 'sindoor',
+  'chhath-soop': 'soop',
+  'chhath-strawberry': 'strawberry',
+  'chhath-sugar': 'sugar',
+  'chhath-sugarcane': 'sugarcane',
+  'chhath-surya-picture': 'surya-picture',
+  'chhath-sweet-lime': 'sweet-lime',
+  'chhath-sweet-potato': 'sweet-potato',
+  'chhath-turmeric-leaves': 'turmeric-leaves',
+  'chhath-water-chestnut': 'water-chestnut',
+  'chhath-wheat-flour': 'wheat-flour',
+}
+
 function build(group: ChhathGroup, rows: Row[]): Product[] {
-  return rows.map(([slug, name, hindi, unit, price]) => ({
-    id: `chhath-${slug}`,
+  return rows.map(([slug, name, hindi, unit, price]) => {
+    const id = `chhath-${slug}`
+    const img = itemImages[id]
+    const photo = img ? `/chath/items/${img}-400.webp` : ''
+    return {
+    id,
     name,
     category: 'Chhath',
     group,
@@ -195,12 +281,13 @@ function build(group: ChhathGroup, rows: Row[]): Product[] {
     unit,
     price: price ?? DEFAULT_PRICE[group],
     description: `${name} — ${hindi} (${unit})`,
-    image: '/favicon.png',
-    images: [],
+    image: photo || '/favicon.png',
+    images: photo ? [photo] : [],
     features: [],
     details: '',
     reviews: [],
-  }))
+    }
+  })
 }
 
 export const chhathProducts: Product[] = [

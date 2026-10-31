@@ -40,10 +40,13 @@ export function Header({ onOpenCart }: Props) {
           <button type="button" className="nav-link" onClick={goShop}>
             Shop
           </button>
-          <Link to="/" className="nav-link">
+          <Link to="/" className={location.pathname === '/' ? 'nav-link active' : 'nav-link'}>
             Diwali
           </Link>
-          <Link to="/chhath" className="nav-link">
+          <Link
+            to="/chhath"
+            className={location.pathname.startsWith('/chhath') ? 'nav-link active' : 'nav-link'}
+          >
             Chhath
           </Link>
           <Link to="/track" className="nav-link">
