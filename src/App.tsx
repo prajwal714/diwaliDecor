@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import {
   BrowserRouter,
   Navigate,
@@ -11,15 +11,17 @@ import { Analytics } from '@vercel/analytics/react'
 import { ProductsProvider } from './context/ProductsContext'
 import { CartProvider } from './context/CartContext'
 import { Header } from './components/Header'
-import { HomePage } from './components/HomePage'
-import { ProductPage } from './components/ProductPage'
 import { ChhathHome, ChhathCategoryPage } from './components/ChhathPage'
 import { CartDrawer } from './components/CartDrawer'
-import { CheckoutPage } from './components/CheckoutPage'
-import { TrackPage } from './components/TrackPage'
-import { AdminPage } from './components/AdminPage'
-import { Footer } from './components/Footer'
 import { WhatsAppFloat } from './components/WhatsAppFloat'
+
+// Route-level code splitting: Chhath (landing) stays in the main bundle.
+const Footer = lazy(() => import('./components/Footer').then((m) => ({ default: m.Footer })))
+const HomePage = lazy(() => import('./components/HomePage').then((m) => ({ default: m.HomePage })))
+const ProductPage = lazy(() => import('./components/ProductPage').then((m) => ({ default: m.ProductPage })))
+const CheckoutPage = lazy(() => import('./components/CheckoutPage').then((m) => ({ default: m.CheckoutPage })))
+const TrackPage = lazy(() => import('./components/TrackPage').then((m) => ({ default: m.TrackPage })))
+const AdminPage = lazy(() => import('./components/AdminPage').then((m) => ({ default: m.AdminPage })))
 
 function scrollToShop() {
   document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' })
@@ -57,6 +59,7 @@ function AppShell() {
       <HashScroll />
       {!isCheckout && <Header onOpenCart={openCart} />}
       <main>
+        <Suspense fallback={<div style={{ minHeight: '60vh' }} aria-busy="true" />}>
         <Routes>
           <Route path="/" element={<ChhathHome />} />
           <Route
@@ -86,8 +89,13 @@ function AppShell() {
           <Route path="/track" element={<TrackPage />} />
           <Route path="/admin/*" element={<AdminPage />} />
         </Routes>
+        </Suspense>
       </main>
-      {!isCheckout && <Footer />}
+      {!isCheckout && (
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
+      )}
       {!isCheckout && <WhatsAppFloat />}
       <CartDrawer
         open={cartOpen}

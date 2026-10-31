@@ -83,7 +83,7 @@ function ChhathImage({
     <picture>
       <source
         type="image/webp"
-        srcSet={`${base}-800.webp 800w, ${base}-1600.webp 1600w`}
+        srcSet={`${base}-480.webp 480w, ${base}-800.webp 800w, ${base}-1600.webp 1600w`}
         sizes={sizes}
       />
       <img
@@ -91,6 +91,7 @@ function ChhathImage({
         alt={alt}
         className={className}
         loading={eager ? 'eager' : 'lazy'}
+        fetchPriority={eager ? 'high' : undefined}
         decoding="async"
       />
     </picture>
@@ -99,6 +100,8 @@ function ChhathImage({
 
 function ChhathHero() {
   const [active, setActive] = useState(0)
+  // Only mount slides once they have been shown, so hidden slides don't download up front.
+  const [seen, setSeen] = useState<number[]>([0])
   useEffect(() => {
     const t = window.setInterval(
       () => setActive((i) => (i + 1) % chhathHeroImages.length),
@@ -106,11 +109,16 @@ function ChhathHero() {
     )
     return () => window.clearInterval(t)
   }, [active])
+  useEffect(() => {
+    setSeen((s) => (s.includes(active) ? s : [...s, active]))
+  }, [active])
   return (
     <section className="banner chhath-banner" aria-label="Chhath Puja">
       {chhathHeroImages.map((src, i) => (
         <div key={src} className={i === active ? 'banner-slide active' : 'banner-slide'} aria-hidden={i !== active}>
-          <ChhathImage src={src} alt="" sizes="100vw" className="banner-img" eager={i === 0} />
+          {seen.includes(i) && (
+            <ChhathImage src={src} alt="" sizes="100vw" className="banner-img" eager={i === 0} />
+          )}
           {i === active && (
             <div className="banner-copy">
               <img className="banner-mark" src="/favicon.png" alt="" width={48} height={48} />

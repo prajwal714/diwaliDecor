@@ -54,7 +54,7 @@ async function run() {
     for (const file of fs.readdirSync(chhathDir)) {
       if (!/\.(png|jpe?g)$/i.test(file)) continue
       const base = file.replace(/\.[^.]+$/, '')
-      for (const w of [800, 1600]) {
+      for (const w of [480, 800, 1600]) {
         await writeWebp(
           path.join(chhathDir, file),
           path.join(chhathDir, `${base}-${w}.webp`),

@@ -127,7 +127,8 @@ function writeProductHtml(tpl: string, outDir: string, destParts: string[], meta
     },
   }
   const set = (html: string, re: RegExp, val: string) => html.replace(re, val)
-  let html = tpl
+  // The landing-page hero preload only belongs on `/`.
+  let html = tpl.replace(/<link\s+rel="preload"[\s\S]*?\/>\s*/, '')
   html = set(html, /<title>[\s\S]*?<\/title>/, `<title>${esc(title)}</title>`)
   html = set(html, /(<meta\s+name="description"\s+content=")[^"]*"/, `$1${esc(desc)}"`)
   html = set(html, /(<link rel="canonical" href=")[^"]*"/, `$1${url}"`)
@@ -166,7 +167,8 @@ function writeOgPage(
     primaryImageOfPage: ogImage,
   }
   const set = (html: string, re: RegExp, val: string) => html.replace(re, val)
-  let html = tpl
+  // The landing-page hero preload only belongs on `/`.
+  let html = tpl.replace(/<link\s+rel="preload"[\s\S]*?\/>\s*/, '')
   html = set(html, /<title>[\s\S]*?<\/title>/, `<title>${esc(title)}</title>`)
   html = set(html, /(<meta\s+name="description"\s+content=")[^"]*"/, `$1${esc(desc)}"`)
   html = set(html, /(<link rel="canonical" href=")[^"]*"/, `$1${url}"`)
