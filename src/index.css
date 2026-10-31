@@ -3414,3 +3414,14 @@ h3 {
   .brand img { height: 28px; }
   .nav-link { font-size: 0.85rem; padding: 0.4rem 0.35rem; }
 }
+
+/* Chhath theme overrides have higher specificity; re-apply mobile header sizing */
+@media (max-width: 560px) {
+  :root[data-theme='chhath'] .header { padding-left: 0.6rem; padding-right: 0.6rem; }
+  :root[data-theme='chhath'] .header-nav { gap: 0; }
+  :root[data-theme='chhath'] .nav-link { font-size: 0.95rem; padding: 0.4rem 0.5rem; }
+}
+@media (max-width: 380px) {
+  :root[data-theme='chhath'] .nav-link { font-size: 0.85rem; padding: 0.4rem 0.35rem; }
+}
+html, body { overflow-x: clip; }
