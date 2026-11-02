@@ -31,6 +31,8 @@ export type Product = {
   group?: string
   hindiName?: string
   unit?: string
+  /** Numeric catalog SKU (Chhath 2001+, Toran uses id suffix) */
+  sku?: number
   reviews: Review[]
 }
 

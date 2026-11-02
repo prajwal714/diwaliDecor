@@ -303,7 +303,10 @@ export function ChhathCategoryPage({ onAdded, onBuyNow }: Props) {
                   <div className="chhath-item-info">
                     <strong>{p.name}</strong>
                     <span className="chhath-hi" lang="hi">{p.hindiName}</span>
-                    <span className="chhath-item-meta">{p.unit} · {formatINR(p.price)}</span>
+                    <span className="chhath-item-meta">
+                      {p.sku != null ? `#${p.sku} · ` : ''}
+                      {p.unit} · {formatINR(p.price)}
+                    </span>
                   </div>
                   {p.soldOut ? (
                     <span className="chhath-sold">Sold out</span>

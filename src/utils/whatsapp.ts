@@ -34,10 +34,12 @@ export function buildOrderMessage(order: OrderDetails): string {
     `Payment: ${order.payment === 'UPI' ? 'UPI' : 'Cash on delivery'}`,
     '',
     'Items:',
-    ...order.items.map(
-      (i) =>
-        `- ${i.product.name} x${i.qty} — ${formatINR(i.product.price * i.qty)}`,
-    ),
+    ...order.items.map((i) => {
+      const fromId = i.product.id.match(/^(?:chhath|toran)-(\d+)$/)
+      const sku = i.product.sku ?? (fromId ? Number(fromId[1]) : undefined)
+      const label = sku != null ? `[${sku}] ${i.product.name}` : i.product.name
+      return `- ${label} x${i.qty} — ${formatINR(i.product.price * i.qty)}`
+    }),
     '',
     `Total: ${formatINR(order.subtotal)}`,
     ...(order.payment === 'UPI'
