@@ -21,6 +21,7 @@ const HomePage = lazy(() => import('./components/HomePage').then((m) => ({ defau
 const ProductPage = lazy(() => import('./components/ProductPage').then((m) => ({ default: m.ProductPage })))
 const CheckoutPage = lazy(() => import('./components/CheckoutPage').then((m) => ({ default: m.CheckoutPage })))
 const TrackPage = lazy(() => import('./components/TrackPage').then((m) => ({ default: m.TrackPage })))
+const TermsPage = lazy(() => import('./components/TermsPage').then((m) => ({ default: m.TermsPage })))
 const AdminPage = lazy(() => import('./components/AdminPage').then((m) => ({ default: m.AdminPage })))
 
 function scrollToShop() {
@@ -36,6 +37,8 @@ function HashScroll() {
       requestAnimationFrame(() =>
         document.getElementById('chhath-shop')?.scrollIntoView({ behavior: 'smooth' }),
       )
+    } else if (!location.hash) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }, [location])
   return null
@@ -87,6 +90,7 @@ function AppShell() {
           />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/track" element={<TrackPage />} />
+          <Route path="/terms" element={<TermsPage />} />
           <Route path="/admin/*" element={<AdminPage />} />
         </Routes>
         </Suspense>

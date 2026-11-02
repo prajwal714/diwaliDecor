@@ -1,7 +1,7 @@
 import type { Product } from './products.seed.ts'
 
 /** Minimum order value (INR) for Chhath items in a cart. */
-export const CHHATH_MIN_ORDER = 2500
+export const CHHATH_MIN_ORDER = 2000
 
 export type ChhathGroup = 'Puja Essentials' | 'Fruits' | 'Prasad Ingredients'
 
@@ -143,7 +143,7 @@ const essentials: Row[] = [
   [2039, 'mango-wood', 'Mango Wood', 'आम की लकड़ी', '2.5 kg'],
   [2040, 'upla', 'Cow Dung Cakes', 'गोबर के उपले', '10 pc'],
   [2041, 'jatadhari', 'Jatadhari Phool', 'जटाधारी फूल', '100 gm'],
-  [2042, 'kerao', 'Green Peas (Kerao)', 'केराव (मटर)', '250 gm'],
+  [2042, 'kerao', 'Keraw (Kusiya Matar)', 'केराव (कुसिया मटर)', '250 gm'],
 ]
 
 const fruits: Row[] = [
@@ -344,7 +344,9 @@ const PHOTO_BASES = new Set([
   'imported-orange',
   'jaggery',
   'janeu',
+  'jatadhari',
   'kalash',
+  'kerao',
   'kiwi',
   'longan',
   'mango-wood',

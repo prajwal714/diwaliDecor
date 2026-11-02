@@ -154,6 +154,7 @@ export function CheckoutPage() {
   const { items, subtotal, itemCount, setQty, remove, clear } = useCart()
   const navigate = useNavigate()
   const saved = loadAddress()
+  const hasChhath = items.some((i) => i.product.category === 'Chhath')
 
   const [step, setStep] = useState<Step>('cart')
   const [addr, setAddr] = useState<Address>(saved ?? EMPTY)
@@ -581,6 +582,14 @@ export function CheckoutPage() {
                     Edit
                   </button>
                 </div>
+
+                {hasChhath && (
+                  <p className="co-terms-note">
+                    Chhath package orders are subject to our{' '}
+                    <Link to="/terms">Terms &amp; Conditions</Link>
+                    {' '}(min. {formatINR(CHHATH_MIN_ORDER)}).
+                  </p>
+                )}
 
                 {error && (
                   <p className="form-error" role="alert">

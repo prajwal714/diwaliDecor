@@ -196,6 +196,11 @@ export function ChhathHome() {
         <li><TruckIcon size={20} /> Pan-India Delivery</li>
         <li><CashIcon size={20} /> UPI / Cash on Delivery</li>
       </ul>
+      <p className="chhath-terms-note">
+        Chhath package orders are subject to our{' '}
+        <Link to="/terms">Terms &amp; Conditions</Link>
+        {' '}(min. order {formatINR(CHHATH_MIN_ORDER)}).
+      </p>
       </div>
     </>
   )
@@ -415,7 +420,8 @@ export function ChhathCategoryPage({ onAdded, onBuyNow }: Props) {
                 Delivery across India. Pay by UPI QR at checkout or cash on delivery. Orders are
                 confirmed on{' '}
                 <a href={chatUrl()} target="_blank" rel="noopener noreferrer">WhatsApp</a>.
-                Minimum order for Chhath items is {formatINR(CHHATH_MIN_ORDER)}.
+                Minimum order for Chhath items is {formatINR(CHHATH_MIN_ORDER)}. See{' '}
+                <Link to="/terms">Terms &amp; Conditions</Link>.
               </p>
             </details>
             <ul className="chhath-trust">

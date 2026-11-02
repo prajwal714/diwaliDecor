@@ -20,8 +20,10 @@ export function Footer() {
         <strong>{shopConfig.brandName}</strong> — {shopConfig.tagline}
       </p>
       <p className="muted">{shopConfig.deliveryNote}</p>
-      <p>
+      <p className="footer-links">
         <Link to="/track">Track your order</Link>
+        <span aria-hidden="true"> · </span>
+        <Link to="/terms">Terms &amp; Conditions</Link>
       </p>
       <div style={{ margin: '16px auto', background: '#fff', padding: 8, width: 'fit-content', borderRadius: 8 }}>
         <QRCodeSVG
